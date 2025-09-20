@@ -1,5 +1,3 @@
-# valkyrie/backend/app/main.py (only the startup() body changes)
-
 from fastapi import FastAPI
 from sqlalchemy import text
 from .db import engine

@@ -1,3 +1,7 @@
-networks:
-  odinnet:
-    driver: bridge
+services:
+  postgres:
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata: {}
