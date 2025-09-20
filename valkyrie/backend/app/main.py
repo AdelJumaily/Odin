@@ -8,6 +8,7 @@ from .routers import health
 from .routers.ingest import router as ingest_router
 from .routers.download import router as download_router
 from .routers.list import router as list_router
+from .routers import search as search_router
 
 app = FastAPI(title="Odin Valkyrie", version="0.1")
 
@@ -49,3 +50,4 @@ app.include_router(health.router)
 app.include_router(ingest_router)
 app.include_router(list_router)
 app.include_router(download_router)
+app.include_router(search_router.router)

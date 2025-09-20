@@ -17,6 +17,7 @@ services:
     networks: [odinnet]
 
   backend:
+    user: "1000:1000"
     container_name: odin-valkyrie-backend
     build:
       context: .
