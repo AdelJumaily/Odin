@@ -1,0 +1,26 @@
+# Vercel ignore file
+node_modules
+.next
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Database files (not needed on Vercel)
+database/
+data/
+*.db
+
+# Docker files (not needed on Vercel)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Development files
+scripts/
+test-*.js
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
