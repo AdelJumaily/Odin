@@ -108,13 +108,13 @@ export default function Navbar() {
           </div>
 
           {/* Centered content: Logo + Nav */}
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-15">
             <a
               href="#"
-              className="text-white hover:text-white transition-all duration-300 hover:shadow-[0_0_20px_rgba(129,27,246,0.5)] hover:shadow-lg"
+              className="text-white hover:text-[#e01300] transition-all duration-300 hover:shadow-[0_0_20px_rgba(129,27,246,0.5)] hover:shadow-lg"
               aria-label="Home"
             >
-              <img src="/odin_logo.png" alt="Odin Logo" className="h-8 w-auto" />
+              <img src="/odin_logo.png" alt="Odin Logo" className="h-12 w-12" />
             </a>
 
             {/* Desktop nav */}
@@ -135,7 +135,7 @@ export default function Navbar() {
           </div>
 
           {/* Auth buttons - positioned absolute right */}
-          <div className="absolute right-8 flex items-center gap-4">
+          <div className="absolute right-8 flex items-center gap-7">
             <Button
               asChild
               variant="ghost"
@@ -148,7 +148,7 @@ export default function Navbar() {
             <Button
               asChild
               size="sm"
-              className="bg-gradient-to-r from-[#811bf6] to-[#6b1bb8] border-0 text-white hover:from-[#6b1bb8] hover:to-[#5a1a9e] px-8 py-3 rounded-full text-sm font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-[0_0_30px_rgba(129,27,246,0.6)] hover:shadow-lg"
+              className="bg-gradient-to-r from-[#e01300] to-[#ff6940] border-0 text-white w-hover:from-[#e01300] hover:to-[#ff6940] px-8 py-3 rounded-full text-sm font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-[0_0_30px_rgba(129,27,246,0.6)] hover:shadow-lg"
             >
               <a href="/login">Get Started</a>
             </Button>
