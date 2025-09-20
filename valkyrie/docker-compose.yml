@@ -1,0 +1,36 @@
+version: "3.8"
+
+name: odin-valkyrie
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: odin-valkyrie-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./valkyrie/data/pos:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks: [odinnet]
+
+  backend:
+    container_name: odin-valkyrie-backend
+    build:
+      context: ./valkyrie
+      dockerfile: backend/Dockerfile
+    env_file: ./valkyrie/.env
+    volumes:
+      # raw file storage (mounted into the container at /files)
+      - ./valkyrie/data/files:/files
+    depends_on:
+      - postgres
+    ports:
+      - "6789:6789"     # API exposed on Pi/LAN
+    restart: unless-stopped
+    networks: [odinnet]
+
+networks:
+  odinnet:
+    driver: bridge
