@@ -5,6 +5,7 @@
 import Logo from "@/registry/default/components/navbar-components/logo"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { LinearGradient } from 'react-text-gradients'
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -92,7 +93,7 @@ export default function Navbar() {
                     <div className="pt-4 pb-2 border-t border-white/10 w-full">
                       <NavigationMenuLink
                         href="/login"
-                        className="block py-3 px-2 text-white hover:text-white transition-all duration-300 hover:shadow-[0_0_20px_rgba(129,27,246,0.5)] hover:shadow-lg"
+                        className="block w-30 py-3 px-2 text-white hover:text-white transition-all duration-300 hover:shadow-[0_0_20px_rgba(129,27,246,0.5)] hover:shadow-lg"
                       >
                         Login
                       </NavigationMenuLink>
@@ -107,24 +108,31 @@ export default function Navbar() {
             </Popover>
           </div>
 
+          <div className="absolute left-6 flex items-center justify-center h-full">
+              <a className="">
+                <img src="/odin_logo.png" alt="Odin Logo" className="h-13 w-13"/>
+              </a>
+              <p className="text-[43px] font-[5pt]">
+                <LinearGradient gradient={['to right', '#e01300 ,#ff6940']}>odin</LinearGradient>
+              </p>
+          </div>
+
           {/* Centered content: Logo + Nav */}
-          <div className="flex items-center gap-8">
+          <div className="flex align-center">
             <a
               href="#"
-              className="text-white hover:text-white transition-all duration-300 hover:shadow-[0_0_20px_rgba(129,27,246,0.5)] hover:shadow-lg"
+              className="text-white hover:text-[#e01300] transition-all duration-300 hover:shadow-[0_0_20px_rgba(129,27,246,0.5)] hover:shadow-lg"
               aria-label="Home"
-            >
-              <img src="/odin_logo.png" alt="Odin Logo" className="h-8 w-auto" />
-            </a>
-
+            ></a>
+            
             {/* Desktop nav */}
             <NavigationMenu className="max-md:hidden">
-              <NavigationMenuList className="gap-6">
+              <NavigationMenuList className="gap-20">
                 {navigationLinks.map((link, index) => (
                   <NavigationMenuItem key={index}>
                     <NavigationMenuLink
                       href={link.href}
-                      className="text-white/90 hover:text-white px-3 py-2 text-sm font-medium transition-colors hover:underline underline-offset-8 decoration-white/30"
+                      className="text-white/90 hover:text-[#e01300] px-3 py-2 text-base font-medium transition-colors hover:underline underline-offset-8 decoration-white/30"
                     >
                       {link.label}
                     </NavigationMenuLink>
@@ -135,12 +143,12 @@ export default function Navbar() {
           </div>
 
           {/* Auth buttons - positioned absolute right */}
-          <div className="absolute right-8 flex items-center gap-4">
+          <div className="absolute right-8 flex items-center gap-1">
             <Button
               asChild
               variant="ghost"
               size="sm"
-              className="text-white hover:text-white bg-transparent hover:bg-white/5 transition-colors rounded-full px-4"
+              className="text-white w-25 h-10 hover:text-white bg-transparent hover:bg-white/5 transition-colors rounded-full px-4"
             >
               <a href="/login">Login</a>
             </Button>
@@ -148,9 +156,9 @@ export default function Navbar() {
             <Button
               asChild
               size="sm"
-              className="bg-gradient-to-r from-[#811bf6] to-[#6b1bb8] border-0 text-white hover:from-[#6b1bb8] hover:to-[#5a1a9e] px-8 py-3 rounded-full text-sm font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-[0_0_30px_rgba(129,27,246,0.6)] hover:shadow-lg"
+              className="w-35 h-10 bg-gradient-to-r from-[#e01300] to-[#ff6940] border-0 text-white w-hover:from-[#e01300] hover:to-[#ff6940] px-8 py-3 rounded-full text-sm font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-[0_0_30px_rgba(129,27,246,0.6)] hover:shadow-lg"
             >
-              <a href="/login">Get Started</a>
+              <a href="/login" className="">Get Started</a>
             </Button>
           </div>
         </div>
