@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  # Odin Desktop Application
+  odin-desktop:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: odin-desktop
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - LOCAL_DATABASE_PATH=/app/data/odin_local.db
+      - LOCAL_DATABASE_WAL=true
+      - LOCAL_DATABASE_FOREIGN_KEYS=true
+      - PORT=3000
+    volumes:
+      # Persist SQLite database
+      - odin_data:/app/data
+      # Optional: Mount config directory for user settings
+      - odin_config:/app/config
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: PostgreSQL for development/testing
+  postgres-dev:
+    image: postgres:15-alpine
+    container_name: odin-postgres-dev
+    environment:
+      - POSTGRES_DB=odin_cloud
+      - POSTGRES_USER=odin_user
+      - POSTGRES_PASSWORD=odin_secure_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/cloud/migrations:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    profiles:
+      - dev
+
+  # Optional: Redis for caching (if needed)
+  redis:
+    image: redis:7-alpine
+    container_name: odin-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    profiles:
+      - dev
+
+volumes:
+  odin_data:
+    driver: local
+  odin_config:
+    driver: local
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
