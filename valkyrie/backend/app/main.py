@@ -1,3 +1,5 @@
+# valkyrie/backend/app/main.py (only the startup() body changes)
+
 from fastapi import FastAPI
 from sqlalchemy import text
 from .db import engine
@@ -7,44 +9,43 @@ from .routers.ingest import router as ingest_router
 from .routers.download import router as download_router
 from .routers.list import router as list_router
 
-app = FastAPI(title="Oden Valkyrie", version="0.1.0")
+app = FastAPI(title="Odin Valkyrie", version="0.1")
 
 @app.on_event("startup")
 def startup():
-    Base.metadata.create_all(engine)
+    Base.metadata.create_all(bind=engine)
 
     with engine.begin() as con:
+        # Users (api_key is UNIQUE)
         con.execute(text("""
-          INSERT INTO users(name, api_key, role)
-          SELECT 'CEO','ceo-key-123','ceo'
-          WHERE NOT EXISTS(SELECT 1 FROM users WHERE api_key='ceo-key-123');
-        """))
+            INSERT INTO users (name, api_key, role)
+            VALUES (:n, :k, :r)
+            ON CONFLICT (api_key) DO NOTHING
+        """), [{"n":"CEO","k":"ceo-key-123","r":"ceo"},
+               {"n":"Alice","k":"alice-key-123","r":"editor"},
+               {"n":"Intern","k":"intern-key-123","r":"intern"}])
+
+        # Projects (name is UNIQUE)
         con.execute(text("""
-          INSERT INTO users(name, api_key, role)
-          SELECT 'Alice','alice-key-123','editor'
-          WHERE NOT EXISTS(SELECT 1 FROM users WHERE api_key='alice-key-123');
-        """))
+            INSERT INTO projects (name)
+            VALUES (:n)
+            ON CONFLICT (name) DO NOTHING
+        """), [{"n":"Apollo"}, {"n":"Zephyr"}])
+
+        # Project membership (avoid dup with NOT EXISTS)
         con.execute(text("""
-          INSERT INTO users(name, api_key, role)
-          SELECT 'Intern','intern-key-123','intern'
-          WHERE NOT EXISTS(SELECT 1 FROM users WHERE api_key='intern-key-123');
-        """))
-        con.execute(text("""
-          INSERT INTO projects(name) SELECT 'Apollo
-          WHERE NOT EXISTS(SELECT 1 FROM projects WHERE name='Apollo');
-        """))
-        con.execute(text("""
-          INSERT INTO projects(name) SELECT 'Zepher
-          WHERE NOT EXISTS(SELECT 1 FROM projects WHERE name='Zepher');
-        """))
-        con.execute(text("""
-          INSERT INTO project_membership(user_id, project_id)
-          SELECT u.id, p.id FROM users u, projects p
-          WHERE u.name='Alice' AND p.name='Apollo'
-          AND NOT EXISTS (SELECT 1 FROM project_membership pm WHERE pm.user_id=u.id AND pm.project_id=p.id);
-        """))
+            INSERT INTO project_membership (user_id, project_id)
+            SELECT u.id, p.id
+            FROM users u, projects p
+            WHERE u.name = :uname AND p.name = :pname
+              AND NOT EXISTS (
+                SELECT 1 FROM project_membership pm
+                WHERE pm.user_id = u.id AND pm.project_id = p.id
+              )
+        """), [{"uname":"Alice","pname":"Apollo"},
+               {"uname":"Intern","pname":"Zephyr"}])
 
 app.include_router(health.router)
 app.include_router(ingest_router)
-app.include_router(download_router)
 app.include_router(list_router)
+app.include_router(download_router)

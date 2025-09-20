@@ -1,7 +1,3 @@
-version: "3.8"
-
-name: odin-valkyrie
-
 services:
   postgres:
     image: postgres:16-alpine
@@ -11,26 +7,27 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - ./valkyrie/data/pos:/var/lib/postgresql/data
+      - ./data/pos:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-valkyrie} -d ${POSTGRES_DB:-valkyrie}"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
     restart: unless-stopped
     networks: [odinnet]
 
   backend:
     container_name: odin-valkyrie-backend
     build:
-      context: ./valkyrie
+      context: .
       dockerfile: backend/Dockerfile
-    env_file: ./valkyrie/.env
+    env_file: ./.env
     volumes:
-      # raw file storage (mounted into the container at /files)
-      - ./valkyrie/data/files:/files
+      - ./data/files:/files
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     ports:
-      - "6789:6789"     # API exposed on Pi/LAN
+      - "6789:6789"
     restart: unless-stopped
     networks: [odinnet]
-
-networks:
-  odinnet:
-    driver: bridge
