@@ -1,29 +1,130 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Eye, EyeOff } from "lucide-react"
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
+  const router = useRouter();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [storageAmount, setStorageAmount] = useState("100GB");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  // Platform detection
+  const detectPlatform = () => {
+    if (typeof window === 'undefined') return 'linux';
+    const userAgent = window.navigator.userAgent;
+    if (userAgent.includes('Mac')) return 'mac';
+    if (userAgent.includes('Windows')) return 'win';
+    if (userAgent.includes('Linux')) return 'linux';
+    return 'linux';
+  };
+
+  // Password validation
+  const validatePassword = (password: string) => {
+    if (password.length < 8) {
+      return "Password must be at least 8 characters long";
+    }
+    if (!/(?=.*[a-z])/.test(password)) {
+      return "Password must contain at least one lowercase letter";
+    }
+    if (!/(?=.*[A-Z])/.test(password)) {
+      return "Password must contain at least one uppercase letter";
+    }
+    if (!/(?=.*\d)/.test(password)) {
+      return "Password must contain at least one number";
+    }
+    return "";
+  };
+
+  // Check if passwords match
+  const passwordsMatch = password === confirmPassword;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError("");
+    setPasswordError("");
     
-    // Simulate signup process
-    setTimeout(() => {
-      console.log("Signup attempt:", { email, password, confirmPassword });
+    // Validate password
+    const passwordValidationError = validatePassword(password);
+    if (passwordValidationError) {
+      setPasswordError(passwordValidationError);
       setIsLoading(false);
-      // Here you would typically handle the actual signup logic
-    }, 1000);
+      return;
+    }
+
+    // Check if passwords match
+    if (!passwordsMatch) {
+      setPasswordError("Passwords do not match");
+      setIsLoading(false);
+      return;
+    }
+    
+    try {
+      // 1) Create org / user (existing signup)
+      const signupRes = await fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          name,
+          email, 
+          password, 
+          confirmPassword,
+          storageAmount
+        })
+      });
+      
+      if (!signupRes.ok) {
+        const errorData = await signupRes.json();
+        throw new Error(errorData.error || "Signup failed");
+      }
+
+      const { orgId } = await signupRes.json();
+
+      // 2) Request generated installer for this org
+      const genRes = await fetch("/api/installer/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          orgId, 
+          platform: detectPlatform(),
+          preferences: {
+            storageAmount,
+            name
+          }
+        })
+      });
+      
+      if (!genRes.ok) {
+        const errorText = await genRes.text();
+        console.error("Installer generation failed:", errorText);
+        throw new Error("Could not generate installer. Please try again or contact support.");
+      }
+
+      const { downloadUrl, checksum } = await genRes.json();
+
+      // 3) Navigate directly to download page (download will start automatically)
+      router.push(`/download?org=${orgId}&checksum=${checksum}&downloadUrl=${encodeURIComponent(downloadUrl)}`);
+      
+    } catch (err) {
+      console.error("Signup error:", err);
+      setError(err instanceof Error ? err.message : "An error occurred during signup");
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -35,6 +136,18 @@ export function SignupForm({
         </p>
       </div>
       <div className="grid gap-6">
+        <div className="grid gap-2">
+          <Label htmlFor="name" className="text-sm font-medium">Full Name</Label>
+          <Input 
+            id="name" 
+            type="text" 
+            placeholder="John Doe" 
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required 
+            className="h-11"
+          />
+        </div>
         <div className="grid gap-2">
           <Label htmlFor="email" className="text-sm font-medium">Email</Label>
           <Input 
@@ -48,27 +161,71 @@ export function SignupForm({
           />
         </div>
         <div className="grid gap-2">
-          <Label htmlFor="password" className="text-sm font-medium">Password</Label>
-          <Input 
-            id="password" 
-            type="password" 
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required 
-            className="h-11"
-          />
+          <Label htmlFor="password" className="text-sm font-medium">Master Password</Label>
+          <div className="relative">
+            <Input 
+              id="password" 
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required 
+              className="h-11 pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            >
+              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
         </div>
         <div className="grid gap-2">
-          <Label htmlFor="confirmPassword" className="text-sm font-medium">Confirm Password</Label>
-          <Input 
-            id="confirmPassword" 
-            type="password" 
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required 
-            className="h-11"
-          />
+          <Label htmlFor="confirmPassword" className="text-sm font-medium">Confirm Master Password</Label>
+          <div className="relative">
+            <Input 
+              id="confirmPassword" 
+              type={showConfirmPassword ? "text" : "password"}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required 
+              className="h-11 pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            >
+              {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
         </div>
+        <div className="grid gap-2">
+          <Label htmlFor="storageAmount" className="text-sm font-medium">Storage Amount</Label>
+          <select
+            id="storageAmount"
+            value={storageAmount}
+            onChange={(e) => setStorageAmount(e.target.value)}
+            className="h-11 px-3 py-2 border border-input bg-background rounded-md text-sm ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          >
+            <option value="10GB">10GB - Basic</option>
+            <option value="50GB">50GB - Standard</option>
+            <option value="100GB">100GB - Professional</option>
+            <option value="500GB">500GB - Enterprise</option>
+            <option value="1TB">1TB - Large Enterprise</option>
+            <option value="unlimited">Unlimited - Custom</option>
+          </select>
+        </div>
+        {passwordError && (
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
+            <p className="text-sm text-red-800 dark:text-red-200">{passwordError}</p>
+          </div>
+        )}
+        {error && (
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
+            <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+          </div>
+        )}
         <Button 
           type="submit" 
           className="w-full h-11 text-sm font-medium"
