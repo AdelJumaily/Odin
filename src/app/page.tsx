@@ -29,15 +29,15 @@ export default function Home() {
               Secure, encrypted file storage and management
             </p>
             
-            {/* Main Headline */}
+            {/* Main Headline - Updated */}
             <div className="mb-12">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight pb-20">
                 Encrypted File Management
               </h1>
             </div>
             
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 justify-center items-center">
+            <div className="flex flex-col gap-5 sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 justify-center items-center">
               <a 
                 href="/signup"
                 className="w-48 h-14 rounded-full bg-[#811bf6] border border-[#811bf6] text-white text-base font-semibold hover:bg-[#6b1bb8] transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-[#811bf6]/25 flex items-center justify-center"
