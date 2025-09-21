@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, password, confirmPassword, storageAmount } = await request.json();
+    const { name, email, organization, password, confirmPassword, storageAmount } = await request.json();
     
     // Basic validation
-    if (!name || !email || !password || !confirmPassword || !storageAmount) {
+    if (!name || !email || !organization || !password || !confirmPassword || !storageAmount) {
       return NextResponse.json({ error: 'All fields are required' }, { status: 400 });
     }
     
@@ -29,7 +29,8 @@ export async function POST(request: NextRequest) {
     
     console.log('Mock signup:', { 
       name, 
-      email, 
+      email,
+      organization,
       orgId, 
       storageAmount
     });

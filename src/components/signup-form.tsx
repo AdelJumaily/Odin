@@ -14,6 +14,7 @@ export function SignupForm({
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [organization, setOrganization] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -81,7 +82,8 @@ export function SignupForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           name,
-          email, 
+          email,
+          organization,
           password, 
           confirmPassword,
           storageAmount
@@ -156,6 +158,18 @@ export function SignupForm({
             placeholder="dreadtristan@example.com" 
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required 
+            className="h-11"
+          />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="organization" className="text-sm font-medium">Organization Name</Label>
+          <Input 
+            id="organization" 
+            type="text" 
+            placeholder="Acme Corporation" 
+            value={organization}
+            onChange={(e) => setOrganization(e.target.value)}
             required 
             className="h-11"
           />

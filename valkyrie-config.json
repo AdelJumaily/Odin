@@ -1,0 +1,57 @@
+{
+  "organization": {
+    "name": "Test Organization",
+    "id": "org_test_123",
+    "generated": "2025-09-21T02:41:24.785Z"
+  },
+  "users": [
+    {
+      "name": "CEO",
+      "role": "ceo",
+      "api_key": "ceo-dbJIPsZwwot9",
+      "description": "Full system access - can manage all projects and users"
+    },
+    {
+      "name": "Project Manager",
+      "role": "editor",
+      "api_key": "pm-fQsmrkmBOiyt",
+      "description": "Project management access - can manage assigned projects"
+    },
+    {
+      "name": "Developer 1",
+      "role": "editor",
+      "api_key": "dev1-D9eVjxX9jS",
+      "description": "Development team access - can upload and manage files"
+    },
+    {
+      "name": "Developer 2",
+      "role": "editor",
+      "api_key": "dev2-NQKhi23Yet",
+      "description": "Development team access - can upload and manage files"
+    },
+    {
+      "name": "Intern",
+      "role": "intern",
+      "api_key": "intern-rQNPB4t3",
+      "description": "Limited access - can view and download files only"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Apollo",
+      "id": 1,
+      "description": "Main project for Test Organization"
+    },
+    {
+      "name": "Zephyr",
+      "id": 2,
+      "description": "Secondary project for Test Organization"
+    }
+  ],
+  "endpoints": {
+    "web_interface": "http://localhost:3000",
+    "api_base": "http://localhost:6789",
+    "health_check": "http://localhost:6789/health",
+    "api_docs": "http://localhost:6789/docs"
+  }
+}
