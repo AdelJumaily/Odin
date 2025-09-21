@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Eye, EyeOff } from "lucide-react"
+import { LinearGradient } from 'react-text-gradients'
 
 export function SignupForm({
   className,
@@ -132,7 +133,7 @@ export function SignupForm({
   return (
     <form className={cn("flex flex-col gap-8", className)} onSubmit={handleSubmit} {...props}>
       <div className="flex flex-col items-center gap-3 text-center">
-        <h1 className="text-3xl font-bold tracking-tight">Create your account</h1>
+        <h1 className="text-3xl font-bold tracking-tight"><LinearGradient gradient={['to right', '#a123f6 ,#5116f6']} fallbackColor="#a123f6">Create your account</LinearGradient></h1>  
         <p className="text-muted-foreground text-sm text-balance max-w-sm">
           Enter your details below to create your account
         </p>
