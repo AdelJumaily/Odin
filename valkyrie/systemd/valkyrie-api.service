@@ -1,0 +1,15 @@
+[Unit]
+Description=Valkyrie API (Docker Compose)
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=%h/valkyrie
+ExecStart=/usr/bin/docker compose -f docker-compose.yml up -d --build
+ExecStop=/usr/bin/docker compose -f docker-compose.yml down
+TimeoutStartSec=600
+
+[Install]
+WantedBy=multi-user.target

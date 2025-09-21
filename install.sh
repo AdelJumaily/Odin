@@ -6,13 +6,13 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Prefer top-level compose files, but fall back to configs/ if present there
-if [ -f "${ROOT_DIR}/docker-compose.yml" ] && [ -f "${ROOT_DIR}/docker-compose.pi.yml" ]; then
-  COMPOSE_A=("-f" "${ROOT_DIR}/docker-compose.yml" "-f" "${ROOT_DIR}/docker-compose.pi.yml")
-elif [ -f "${ROOT_DIR}/configs/docker-compose.yml" ] && [ -f "${ROOT_DIR}/configs/docker-compose.pi.yml" ]; then
-  COMPOSE_A=("-f" "${ROOT_DIR}/configs/docker-compose.yml" "-f" "${ROOT_DIR}/configs/docker-compose.pi.yml")
+if [ -f "${ROOT_DIR}/docker-compose.yml" ]; then
+  COMPOSE_A=("-f" "${ROOT_DIR}/docker-compose.yml")
+elif [ -f "${ROOT_DIR}/configs/docker-compose.yml" ]; then
+  COMPOSE_A=("-f" "${ROOT_DIR}/configs/docker-compose.yml")
 else
-  echo "Could not find docker-compose.yml and docker-compose.pi.yml in root or configs/" >&2
-  echo "Expected one of: ${ROOT_DIR}/docker-compose.yml + ${ROOT_DIR}/docker-compose.pi.yml or ${ROOT_DIR}/configs/docker-compose.yml + ${ROOT_DIR}/configs/docker-compose.pi.yml" >&2
+  echo "Could not find docker-compose.yml in root or configs/" >&2
+  echo "Expected: ${ROOT_DIR}/docker-compose.yml or ${ROOT_DIR}/configs/docker-compose.yml" >&2
   exit 1
 fi
 
@@ -57,7 +57,7 @@ echo "Launching Docker Compose with Pi override"
 
 echo "Command: ${DOCKER_COMPOSE_CMD[*]} ${COMPOSE_A[*]} up -d --build"
 
-# Run compose with the detected files
+# Run compose with the detected files (single compose file)
 ${DOCKER_COMPOSE_CMD[@]} "${COMPOSE_A[@]}" up -d --build
 
 echo "Docker Compose launched. Use 'docker compose ps' to check containers."

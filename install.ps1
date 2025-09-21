@@ -1,13 +1,13 @@
 <#
 .SYNOPSIS
-  Install and start Valkyrie on Raspberry Pi (or local) using Docker Compose with Pi override.
+    Install and start Valkyrie using Docker Compose (single compose file).
 
 DESCRIPTION
-  This script performs lightweight checks (Docker present, compose available), copies `env.docker` to `.env` if missing,
-  ensures data directories exist, and runs the Docker Compose command:
-    docker compose -f docker-compose.yml -f docker-compose.pi.yml up -d --build
+    This script performs lightweight checks (Docker present, compose available), copies `env.docker` to `.env` if missing,
+    ensures data directories exist, and runs the Docker Compose command:
+        docker compose -f docker-compose.yml up -d --build
 
-  If WSL is available and `bash` exists, it prefers calling `install.sh` to keep behavior consistent across platforms.
+    If WSL is available and `bash` exists, it prefers calling `install.sh` to keep behavior consistent across platforms.
 #>
 
 param()
@@ -55,16 +55,16 @@ New-Item -ItemType Directory -Path "$root\data" -Force | Out-Null
 
 Write-Host "Running docker compose with Pi override"
 
-# Determine compose file locations (root or configs)
+# Determine compose file location (root or configs)
 $composeFiles = @()
-if (Test-Path (Join-Path $root 'docker-compose.yml') -and Test-Path (Join-Path $root 'docker-compose.pi.yml')) {
-    $composeFiles = @(Join-Path $root 'docker-compose.yml', Join-Path $root 'docker-compose.pi.yml')
-} elseif (Test-Path (Join-Path $root 'configs\docker-compose.yml') -and Test-Path (Join-Path $root 'configs\docker-compose.pi.yml')) {
-    $composeFiles = @(Join-Path $root 'configs\docker-compose.yml', Join-Path $root 'configs\docker-compose.pi.yml')
+if (Test-Path (Join-Path $root 'docker-compose.yml')) {
+    $composeFiles = @(Join-Path $root 'docker-compose.yml')
+} elseif (Test-Path (Join-Path $root 'configs\docker-compose.yml')) {
+    $composeFiles = @(Join-Path $root 'configs\docker-compose.yml')
 } else {
-    Write-Error "Could not find docker-compose.yml and docker-compose.pi.yml in root or configs/"; exit 1
+    Write-Error "Could not find docker-compose.yml in root or configs/"; exit 1
 }
 
-& docker compose -f $composeFiles[0] -f $composeFiles[1] up -d --build
+& docker compose -f $composeFiles[0] up -d --build
 
 Write-Host "Docker Compose launched. Use 'docker compose ps' to check containers."
