@@ -12,7 +12,7 @@ export default function Home() {
         {/* Background Video */}
         <video
           className="absolute inset-0 w-full h-full object-cover"
-          src="/Untitled video.mp4"
+          src="/globeSpinning.mp4"
           autoPlay
           muted
           loop
