@@ -128,7 +128,7 @@ function DownloadContent() {
                   Mobile file management app for iPhone and iPad
                 </p>
                 <div className="space-y-2 text-xs font-mono opacity-70 mb-4">
-                  <div>Platform: iOS 14+</div>
+                  <div>Platform: iOS 26</div>
                   <div>Size: ~50MB</div>
                   <div>Type: App Store</div>
                 </div>
@@ -153,7 +153,7 @@ function DownloadContent() {
                   Mobile file management app for Android devices
                 </p>
                 <div className="space-y-2 text-xs font-mono opacity-70 mb-4">
-                  <div>Platform: Android 8+</div>
+                  <div>Platform: Android 16</div>
                   <div>Size: ~45MB</div>
                   <div>Type: Google Play</div>
                 </div>
