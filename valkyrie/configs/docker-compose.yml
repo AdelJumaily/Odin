@@ -101,7 +101,7 @@ services:
     env_file:
       - ../.env
     ports:
-      - "${FRONTEND_HOST_PORT:-3000}:3000"
+      - "${FRONTEND_HOST_PORT:-3000}:80"
     depends_on:
       - api
 
