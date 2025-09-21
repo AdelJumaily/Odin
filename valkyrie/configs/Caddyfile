@@ -1,0 +1,4 @@
+:80
+handle_path /api/* {
+  reverse_proxy :8000
+}

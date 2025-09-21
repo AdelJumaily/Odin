@@ -1,0 +1,12 @@
+[tool.poetry]
+name = "valkyrie"
+version = "0.1.0"
+description = "Scaffold for Valkyrie services"
+authors = ["you <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.95"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.0"
