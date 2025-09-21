@@ -1,0 +1,37 @@
+:80
+
+# Serve Valkyrie at the host name `valkyrie.local`.
+# Edit `root` below to point to your built frontend (`web/dist`) on the Pi.
+valkyrie.local {
+  # Static frontend files (change to the path where you build the SPA)
+  root * /home/pi/valkyrie/web/dist
+
+  # Compression
+  encode gzip zstd
+
+  # Serve files and fallback to index.html for SPA routing
+  file_server
+  try_files {path} /index.html
+
+  # Proxy API requests to the backend (change port if your API listens on a different port)
+  handle_path /api/* {
+    reverse_proxy localhost:6789
+  }
+
+  # Proxy websocket connections (ingest progress, events)
+  handle_path /ws/* {
+    reverse_proxy localhost:6789
+  }
+
+  # Basic security headers
+  header {
+    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "DENY"
+    Referrer-Policy "no-referrer-when-downgrade"
+  }
+
+  # Use Caddy's internal CA for a private network; for public domains use automatic TLS (email) or ACME.
+  tls internal
+}
+

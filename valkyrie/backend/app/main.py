@@ -13,14 +13,20 @@ import logging
 logger = logging.getLogger("uvicorn.error")
 try:
 	# Attempt to import optional search router; may raise if module missing or broken
-	from .routers import search as search_router
+	from .routers import search
+	search_router = getattr(search, "router", None)
 except Exception as exc:
 	# Log but do not fail the whole application
 	search_router = None
 	logger.warning("Optional search router not available: %s", exc, exc_info=True)
-
 # Add SQLAlchemy exception imports
 from sqlalchemy.exc import ProgrammingError, SQLAlchemyError
+
+# Add WebSocket, CORS and typing imports
+from fastapi import WebSocket, WebSocketDisconnect
+from fastapi.middleware.cors import CORSMiddleware
+from typing import Set
+import asyncio
 
 app = FastAPI(title="Odin Valkyrie", version="0.1")
 
@@ -80,11 +86,62 @@ def startup():
         logger.exception("Exception during startup: %s", exc)
         raise
 
+# Simple CORS for dev (adjust origins for production)
+app.add_middleware(
+	CORSMiddleware,
+	allow_origins=["*"],
+	allow_credentials=True,
+	allow_methods=["*"],
+	allow_headers=["*"],
+)
+
+# In-process WebSocket broadcaster (dev only; use Redis/pubsub for multi-worker)
+_active_ws: Set[WebSocket] = set()
+_ws_lock = asyncio.Lock()
+
+@app.websocket("/ws/events")
+async def ws_events(ws: WebSocket):
+	await ws.accept()
+	async with _ws_lock:
+		_active_ws.add(ws)
+	try:
+		while True:
+			# keep the connection alive; ignore incoming messages
+			await ws.receive_text()
+	except WebSocketDisconnect:
+		pass
+	finally:
+		async with _ws_lock:
+			_active_ws.discard(ws)
+
+async def broadcast_event(event: dict):
+	"""Send JSON event to all connected WS clients (best-effort)."""
+	dead = []
+	async with _ws_lock:
+		conns = list(_active_ws)
+	for ws in conns:
+		try:
+			await ws.send_json(event)
+		except Exception:
+			dead.append(ws)
+	if dead:
+		async with _ws_lock:
+			for ws in dead:
+				_active_ws.discard(ws)
+
+@app.on_event("shutdown")
+async def shutdown():
+	# clean up any in-memory websockets (no-op for most setups)
+	async with _ws_lock:
+		_active_ws.clear()
+
+# Router includes:
+# keep health as-is (health endpoints usually are non-/api), expose the API routers under /api
 app.include_router(health.router)
-app.include_router(auth_router)
-app.include_router(ingest_router)
-app.include_router(list_router)
-app.include_router(download_router)
-# Only include search router if it imported successfully and exposes `router`
-if search_router and hasattr(search_router, "router"):
-	app.include_router(search_router.router)
+app.include_router(auth_router, prefix="/api")
+app.include_router(ingest_router, prefix="/api")
+app.include_router(list_router, prefix="/api")
+app.include_router(download_router, prefix="/api")
+# Only include search router if it imported successfully and is a router instance
+if search_router:
+	app.include_router(search_router, prefix="/api")

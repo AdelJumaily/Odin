@@ -1,308 +1,119 @@
-# 🏢 Odin Valkyrie - Enterprise File Management System
+# Valkyrie
 
-A complete, self-hosted file management solution designed for enterprise environments. Valkyrie provides secure, encrypted file storage with role-based access control, running entirely within your company's infrastructure.
+Valkyrie is a self-hosted knowledge ingestion and search platform designed for secure, multi-user teams. Upload files, extract entities, generate embeddings, and explore the resulting knowledge graph through hybrid keyword/vector search and graph navigation.
 
-## 🌟 Features
+## Features
 
-### 🔐 Security & Encryption
-- **End-to-End Encryption**: All files encrypted with AES-GCM before storage
-- **Role-Based Access Control**: CEO, Admin, Editor, Viewer, Intern roles
-- **API Key Authentication**: Secure access without passwords
-- **Local Infrastructure**: No external cloud dependencies
-- **File Integrity**: SHA-512 hashing for data verification
+- **Multi-user access** with cookie sessions, magic links, and role-based permissions (Owner, Maintainer, Ingestor, Viewer).
+- **Scoped API keys** for external clients with granular scopes like `ingest:write`, `search:read`, and `graph:read`.
+- **Projects** to group documents, entities, relations, and keys per team or initiative.
+- **Ingestion pipeline** backed by PostgreSQL + pgvector for chunk storage, deterministic embeddings, and optional Neo4j graph sync.
+- **Knowledge graph** services with Neo4j (or Redis fallback) for entity/relationship exploration and graph-powered search expansion.
+- **Real-time events** via Redis pub/sub surfaced through a WebSocket endpoint for ingest progress and notifications.
+- **Dashboard-friendly APIs** covering document ingest, hybrid search, graph subgraphs, and admin telemetry.
 
-### 📁 File Management
-- **Drag & Drop Upload**: Modern file upload interface
-- **Project Organization**: Group files by projects and teams
-- **Advanced Search**: Full-text search across filenames and content
-- **File Preview**: Support for images, documents, and more
-- **Bulk Operations**: Upload, download, and manage multiple files
+## Architecture
 
-### 🔍 Discovery & Search
-- **Text Search**: Search across file names and content
-- **Entity Search**: Find files by type, tags, or metadata
-- **Connected Documents**: Discover related files
-- **Advanced Filtering**: Filter by size, date, type, and more
+| Component   | Role |
+|-------------|------|
+| FastAPI     | Auth, REST endpoints, WebSockets, session cookies |
+| RQ Worker   | Runs ingestion pipeline, embedding refresh, graph sync |
+| PostgreSQL  | Stores users, projects, documents, chunks, entities, relations |
+| Redis       | Queue + cache + pub/sub for worker events |
+| Neo4j       | Optional graph backend for entities/relations |
+| React+Vite  | (Frontend scaffold in `frontend/`) consumes the API |
 
-### 👥 User Management
-- **Multi-User Support**: Team collaboration features
-- **Project Membership**: Control access to specific projects
-- **Role Hierarchy**: Granular permission system
-- **User Activity**: Track file access and modifications
+## Running Locally (Docker Compose)
 
-## 🏗️ Architecture
-
-### Backend (FastAPI + PostgreSQL)
-- **FastAPI**: Modern Python web framework
-- **PostgreSQL**: Robust database with full-text search
-- **Docker**: Containerized deployment
-- **RESTful API**: Clean, documented endpoints
-
-### Frontend (React + Vite)
-- **React 18**: Modern UI framework
-- **Tailwind CSS**: Utility-first styling
-- **Vite**: Fast build tool and dev server
-- **Responsive Design**: Works on all devices
-
-### Infrastructure
-- **Docker Compose**: Easy deployment and scaling
-- **Volume Management**: Persistent data storage
-- **Health Monitoring**: Built-in health checks
-- **Environment Configuration**: Secure key management
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Docker and Docker Compose
-- Node.js 16+ (for development)
-- Python 3.8+ (for development)
-
-### One-Command Installation
-
-```bash
-# Clone and run the complete installation
-git clone <repository-url>
-cd valkyrie
-chmod +x install-complete.sh
-./install-complete.sh
+```
+cp configs/.env.example .env
+poetry install
+poetry run alembic upgrade head
+# start infrastructure
+docker compose up -d postgres redis neo4j
+# start api and worker
+poetry run uvicorn apps.api.main:app --host 0.0.0.0 --port 6789
+poetry run python -m rq worker -c apps.worker.worker
 ```
 
-This will:
-1. ✅ Install all dependencies
-2. ✅ Build the frontend
-3. ✅ Start the backend services
-4. ✅ Launch the web interface
-5. ✅ Generate secure API keys
+Set the required environment variables (see **Configuration**) before launching services. For a full stack (including Caddy, frontend, and Mailpit) refer to `configs/docker-compose.yml`.
 
-### Access the System
-- **Web Interface**: http://localhost:3000
-- **API Endpoint**: http://localhost:6789
-- **Health Check**: http://localhost:6789/health
+## Configuration
 
-## 🔑 Default API Keys
+Environment variables (with defaults) are loaded from `.env`:
 
-For initial setup, use these sample API keys:
+- `VALKYRIE_SECRET_KEY` � session + link signing secret (`dev-secret-key`).
+- `VALKYRIE_DATABASE_URL` � PostgreSQL connection (`postgresql+psycopg://valkyrie:valkyrie@localhost:5432/valkyrie`).
+- `VALKYRIE_REDIS_URL` � Redis URL (`redis://localhost:6379/0`).
+- `VALKYRIE_NEO4J_URL`, `VALKYRIE_NEO4J_USER`, `VALKYRIE_NEO4J_PASSWORD` � graph backend credentials.
+- `VALKYRIE_STORAGE_PATH` � filesystem path for uploaded documents (`data/uploads`).
+- `VALKYRIE_MAIL_BACKEND` � defaults to console logging.
 
-| Role | API Key | Permissions |
-|------|---------|-------------|
-| CEO | `ceo-key-123` | Full access to all files and projects |
-| Editor | `alice-key-123` | Upload, download, and manage files |
-| Intern | `intern-key-123` | Limited access to assigned projects |
+## Core API Highlights
 
-## 📡 API Documentation
+- `POST /auth/login` � password login, sets session cookie.
+- `POST /auth/magic-link` / `GET /auth/magic-link/verify` � email-based auth.
+- `GET /projects/` � list projects current user can access.
+- `POST /projects/{id}/api-keys` � create scoped API key.
+- `POST /ingest/projects/{id}` � upload document (requires session or API key with `ingest:write`).
+- `GET /search/?project_id=...&q=...` � hybrid keyword/vector search over chunks.
+- `GET /search/graph?project_id=...&entity=...` � graph neighborhood lookup.
+- `WS /ws/events` � receive ingest updates (relayed from Redis pub/sub).
 
-### Authentication
-All API requests require an `X-API-Key` header with a valid API key.
+See `apps/api/schemas/__init__.py` for request/response models.
 
-### Core Endpoints
+## Workers & Tasks
 
-#### File Management
-```bash
-# Upload a file
-POST /api/ingest
-Content-Type: multipart/form-data
-X-API-Key: your-api-key
+RQ queues live under the `ingest` namespace and execute:
 
-# Download a file
-GET /api/download/{doc_id}
-X-API-Key: your-api-key
+- `run_ingest_job(job_id)` � reads stored document, chunks text, embeds, writes chunks/entities/relations, and broadcasts progress.
+- `refresh_embeddings(document_id)` � recomputes embeddings for existing chunks.
+- `sync_project_graph(project_id)` � replays entities/relations into Neo4j/Redis.
 
-# List files
-GET /api/list?project_id=1
-X-API-Key: your-api-key
+Start a worker with `poetry run python valkyrie/apps/worker/worker.py` or `poetry run rq worker ingest`.
+
+## Database Migrations
+
+Alembic migrations reside in `migrations/versions/`. Apply with `poetry run alembic upgrade head`. The initial revisions provision users, projects, documents, chunks, entities, relations, API keys, and ingest jobs tables.
+
+## Frontend Scaffold
+
+A companion React/Vite dashboard lives under `frontend/`. It offers login, project overview, upload workflows, search UI, and graph explorer components wired to the API contract above.
+
+## Testing
+
+```
+poetry run pytest
 ```
 
-#### Search
-```bash
-# Text search
-GET /api/search/text?q=search-term
-X-API-Key: your-api-key
+Integration tests can target the REST API once services are running; sample scripts live under `test-valkyrie/`.
 
-# Entity search
-GET /api/search/entity?type=EXT&value=pdf
-X-API-Key: your-api-key
+## Next Steps
 
-# Connected documents
-GET /api/search/connected?from_type=DOC&from_id=1&rel=related
-X-API-Key: your-api-key
-```
 
-#### System
-```bash
-# Health check
-GET /health
-```
+Prototype compatibility layer
+---------------------------
 
-## 🛠️ Development
+The repository contains a small compatibility router at `apps/api/routers/compat.py` that implements a simple
+file-backed prototype store so the legacy frontend under `valkyrie/frontend` can talk to a working API without
+requiring Postgres/Redis/Neo4j. This is intended as a quick way to evaluate the UI flow and UX.
 
-### Backend Development
-```bash
-cd backend
-python -m venv venv
-source venv/bin/activate
+Run the prototype locally (recommended: inside a venv)
+
+PowerShell commands:
+
+```powershell
+cd 'c:\Users\myles\OneDrive\Desktop\Odin\valkyrie'
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-uvicorn app.main:app --reload --port 6789
+ uvicorn apps.api.simple_app:app --reload --port 6789
 ```
 
-### Frontend Development
-```bash
-cd frontend
-npm install
-npm run dev
-```
+Then open the frontend (Vite) dev server or build the frontend and point Caddy to the built assets.
 
-### Full Stack Development
-```bash
-# Terminal 1: Backend
-cd backend && uvicorn app.main:app --reload --port 6789
+Notes and next steps
+- The compat router is not a production DB; migrate to Postgres+pgvector and Neo4j for full functionality.
+- Implement real background workers (RQ/Celery) and connect Redis for queueing and event notifications.
+- Harden authentication, session storage, and API key lifecycle management.
 
-# Terminal 2: Frontend
-cd frontend && npm run dev
-
-# Terminal 3: Database
-docker run -d -p 5432:5432 -e POSTGRES_DB=odin_valkyrie postgres:16-alpine
-```
-
-## 🐳 Docker Deployment
-
-### Production Deployment
-```bash
-# Build and start all services
-docker compose up -d --build
-
-# View logs
-docker compose logs -f
-
-# Stop services
-docker compose down
-```
-
-### Custom Configuration
-Edit `docker-compose.yml` to customize:
-- Port mappings
-- Volume mounts
-- Environment variables
-- Resource limits
-
-## 📊 Database Schema
-
-### Core Tables
-- `users` - User accounts and roles
-- `projects` - File organization containers
-- `documents` - Encrypted file metadata
-- `project_membership` - User-project relationships
-- `relationships` - Knowledge graph edges
-- `doc_entities` - Extracted entities and tags
-
-### Advanced Features
-- Full-text search indexes
-- Knowledge graph relationships
-- Entity extraction and tagging
-- Audit trails and logging
-
-## 🔧 Configuration
-
-### Environment Variables
-```bash
-# Database
-POSTGRES_DB=odin_valkyrie
-POSTGRES_USER=odin_user
-POSTGRES_PASSWORD=your-secure-password
-
-# API Keys
-ODIN_ADMIN_KEY=your-admin-key
-ODIN_READER_KEY=your-reader-key
-
-# Encryption
-ODIN_SECRET_KEY=your-32-byte-base64-key
-
-# Files
-FILES_DIR=/files
-```
-
-### Customization
-- **Themes**: Modify `frontend/src/index.css`
-- **API Endpoints**: Update `frontend/src/services/api.js`
-- **Database**: Modify `backend/app/models.py`
-- **Authentication**: Customize `backend/app/auth.py`
-
-## 🚨 Security Considerations
-
-### Production Deployment
-1. **Change Default Keys**: Generate new API keys and encryption keys
-2. **Network Security**: Use HTTPS and secure network configuration
-3. **Access Control**: Implement proper firewall rules
-4. **Backup Strategy**: Regular encrypted backups of database and files
-5. **Monitoring**: Set up logging and monitoring systems
-
-### Best Practices
-- Regular security updates
-- Strong encryption keys
-- Limited network access
-- Regular backups
-- User access auditing
-
-## 📈 Scaling
-
-### Horizontal Scaling
-- Multiple backend instances behind a load balancer
-- Shared database and file storage
-- Redis for session management
-
-### Vertical Scaling
-- Increase container resources
-- Optimize database queries
-- Implement caching strategies
-
-## 🆘 Troubleshooting
-
-### Common Issues
-
-#### Backend Won't Start
-```bash
-# Check logs
-docker logs odin-valkyrie-backend
-
-# Check database connection
-docker logs odin-valkyrie-postgres
-
-# Restart services
-docker compose restart
-```
-
-#### Frontend Connection Issues
-```bash
-# Check API URL in frontend/.env
-VITE_API_URL=http://localhost:6789
-
-# Verify backend is running
-curl http://localhost:6789/health
-```
-
-#### File Upload Problems
-```bash
-# Check file permissions
-ls -la ./files/
-
-# Check disk space
-df -h
-
-# Restart with fresh volumes
-docker compose down -v
-docker compose up -d
-```
-
-## 📝 License
-
-This project is part of the Odin file management ecosystem.
-
-## 🤝 Support
-
-For support and questions:
-- Check the troubleshooting section
-- Review the API documentation
-- Examine the logs for error details
-
----
-
-**Odin Valkyrie** - Secure, encrypted file management for the modern enterprise.
