@@ -158,7 +158,7 @@ export default function Navbar() {
               size="sm"
               className="w-35 h-10 bg-gradient-to-r from-[#e01300] to-[#ff6940] border-0 text-white w-hover:from-[#e01300] hover:to-[#ff6940] px-8 py-3 rounded-full text-sm font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-[0_0_30px_rgba(129,27,246,0.6)] hover:shadow-lg"
             >
-              <a href="/login" className="">Get Started</a>
+              <a href="/signup" className="">Get Started</a>
             </Button>
           </div>
         </div>

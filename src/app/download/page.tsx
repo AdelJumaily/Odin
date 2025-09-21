@@ -75,25 +75,114 @@ function DownloadContent() {
           </div>
         </div>
 
-        {/* Download Ready Card */}
+        {/* Download Options Card */}
         <div className="card download-card">
           <div className="card-shimmer"></div>
           
           <div className="flex items-center gap-4 mb-6 text-2xl font-semibold">
             <span className="text-3xl icon-pulse">⬇️</span>
-            Download Ready
+            Choose Your Platform
           </div>
           
-          <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden mb-4">
-            <div className="h-full bg-gradient-to-r from-[#00d4ff] to-[#5865f2] rounded-full progress-bar"></div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Main Download - Desktop/Server */}
+            <div className="download-option active">
+              <div className="download-option-glow"></div>
+              <div className="text-center p-6">
+                <div className="text-4xl mb-4">🖥️</div>
+                <h3 className="text-xl font-bold mb-2">Main Download</h3>
+                <p className="text-sm opacity-80 mb-4">
+                  Complete file management system for desktop and server deployment
+                </p>
+                <div className="space-y-2 text-xs font-mono opacity-70 mb-4">
+                  <div>Platform: {platform}</div>
+                  <div>Size: ~7MB</div>
+                  <div>Type: Complete System Package</div>
+                </div>
+                <button 
+                  onClick={() => {
+                    // Trigger download of the Valkyrie system
+                    const link = document.createElement('a');
+                    link.href = '/odin-valkyrie-default.zip';
+                    link.download = 'odin-valkyrie-file-manager.zip';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                  }}
+                  className="w-full bg-gradient-to-r from-[#00d4ff] to-[#5865f2] text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                >
+                  Download Now
+                </button>
+                <div className="mt-2 text-xs opacity-60">
+                  ✅ Ready to install
+                </div>
+              </div>
+            </div>
+
+            {/* iOS Download - Coming Soon */}
+            <div className="download-option coming-soon">
+              <div className="text-center p-6">
+                <div className="text-4xl mb-4">📱</div>
+                <h3 className="text-xl font-bold mb-2">iOS App</h3>
+                <p className="text-sm opacity-80 mb-4">
+                  Mobile file management app for iPhone and iPad
+                </p>
+                <div className="space-y-2 text-xs font-mono opacity-70 mb-4">
+                  <div>Platform: iOS 26</div>
+                  <div>Size: ~50MB</div>
+                  <div>Type: App Store</div>
+                </div>
+                <button 
+                  disabled
+                  className="w-full bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold cursor-not-allowed opacity-50"
+                >
+                  Coming Soon
+                </button>
+                <div className="mt-2 text-xs opacity-60">
+                  🚧 In development
+                </div>
+              </div>
+            </div>
+
+            {/* Android Download - Coming Soon */}
+            <div className="download-option coming-soon">
+              <div className="text-center p-6">
+                <div className="text-4xl mb-4">🤖</div>
+                <h3 className="text-xl font-bold mb-2">Android App</h3>
+                <p className="text-sm opacity-80 mb-4">
+                  Mobile file management app for Android devices
+                </p>
+                <div className="space-y-2 text-xs font-mono opacity-70 mb-4">
+                  <div>Platform: Android 16</div>
+                  <div>Size: ~45MB</div>
+                  <div>Type: Google Play</div>
+                </div>
+                <button 
+                  disabled
+                  className="w-full bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold cursor-not-allowed opacity-50"
+                >
+                  Coming Soon
+                </button>
+                <div className="mt-2 text-xs opacity-60">
+                  🚧 In development
+                </div>
+              </div>
+            </div>
           </div>
-          
-          <div className="space-y-2 font-mono text-sm opacity-90">
-            <div>Organization: {orgId || 'org_1758409386964_o0nyeae7k'}</div>
-            <div>Platform: {platform}</div>
-            <div>SHA256 Checksum:</div>
-            <div className="text-xs break-all opacity-70 mt-2 font-mono bg-black/20 p-2 rounded">
-              {checksum || '87a4b38f13f6c54392eb16d280cf9f922c2d3d3912b6b9077d388c199a6da919'}
+
+          {/* Download Info */}
+          <div className="mt-6 p-4 bg-black/20 rounded-lg">
+            <div className="text-sm font-mono opacity-90">
+              <div className="flex justify-between items-center mb-2">
+                <span>Organization:</span>
+                <span>{orgId || 'org_1758409386964_o0nyeae7k'}</span>
+              </div>
+              <div className="flex justify-between items-center mb-2">
+                <span>SHA256 Checksum:</span>
+                <span className="text-xs break-all">
+                  {checksum || '87a4b38f13f6c54392eb16d280cf9f922c2d3d3912b6b9077d388c199a6da919'}
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -109,10 +198,10 @@ function DownloadContent() {
           
           <ol className="space-y-4 list-none">
             {[
-              'Extract the ZIP file to your desired location',
-              'Run the start script for your platform',
-              'Wait for "Appliance started!" message',
-              'Open http://appliance.local:3001 in your browser'
+              'Download and extract the Valkyrie file manager ZIP file',
+              'Run the install-complete.sh script (Linux/Mac) or install-complete.bat (Windows)',
+              'Wait for "Installation Complete!" message with service URLs',
+              'Open http://localhost:3000 in your browser to access the file manager'
             ].map((step, index) => (
               <li 
                 key={index}
@@ -201,8 +290,10 @@ function DownloadContent() {
           
           <div className="mt-6 p-4 bg-[#00d4ff]/10 border border-[#00d4ff]/20 rounded-xl text-sm access-note">
             <div className="font-semibold mb-2">📍 Access Information:</div>
-            <div>
-              The appliance will be accessible at http://appliance.local:3001 or http://localhost:3001 after installation.
+            <div className="space-y-1">
+              <div>• Web Interface: <span className="font-mono text-[#00d4ff]">http://localhost:3000</span></div>
+              <div>• API Endpoint: <span className="font-mono text-[#00d4ff]">http://localhost:6789</span></div>
+              <div>• Health Check: <span className="font-mono text-[#00d4ff]">http://localhost:6789/health</span></div>
             </div>
           </div>
         </div>
@@ -291,6 +382,51 @@ function DownloadContent() {
         /* Installation steps */
         .step-number {
           animation: bounceIn 0.6s ease-out;
+        }
+
+        /* Download options */
+        .download-option {
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 20px;
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+          min-height: 280px;
+        }
+
+        .download-option.active {
+          border-color: rgba(0, 212, 255, 0.3);
+          background: rgba(0, 212, 255, 0.05);
+        }
+
+        .download-option.coming-soon {
+          opacity: 0.7;
+          filter: grayscale(0.3);
+        }
+
+        .download-option:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .download-option.active:hover {
+          box-shadow: 0 25px 50px rgba(0, 212, 255, 0.3);
+        }
+
+        .download-option-glow {
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+
+        .download-option.active .download-option-glow {
+          opacity: 1;
         }
 
         /* Feature items */

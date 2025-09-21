@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: valkyrie
+      POSTGRES_USER: valkyrie
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-valkyrie_secure_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql://valkyrie:${POSTGRES_PASSWORD:-valkyrie_secure_password}@postgres:5432/valkyrie
+      FILES_DIR: /app/files
+      ODIN_SECRET_KEY: ${ODIN_SECRET_KEY:-$(openssl rand -base64 32)}
+    volumes:
+      - ./files:/app/files
+    ports:
+      - "6789:6789"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      VITE_API_URL: http://localhost:6789
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
