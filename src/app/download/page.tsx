@@ -67,15 +67,15 @@ function DownloadContent() {
       <div className="max-w-5xl mx-auto mt-10 w-full">
         {/* Header */}
         <div className="text-center mb-12 header-animation">
-          <div className="relitive text-6xl font-extrabold pb-3">
+          <div className="relitive text-[75px] font-extrabold">
             <LinearGradient gradient={['to right', '#a123f6 ,#5116f6']} fallbackColor="#a123f6">Valkyrie </LinearGradient>
              File Manager
           </div>
-          <img src="/valyrielogo.png" alt="Valkyrie Logo" className="absolute ml-20 pt-2 h-30 w-45 opacity-25"/>
-          <img src="/valyrielogo.png" alt="Valkyrie Logo" className="absolute ml-20 h-30 w-45 opacity-75 "/>
-          <div className="relitive mt-5 text-xl opacity-80 subtitle-fade font-bold">
+          <div className="relitive text-xl subtitle-fade font-bold pb-2">
             Your secure, encrypted file management system
           </div>
+          <img src="/valyrielogo.png" alt="Valkyrie Logo" className="absolute ml-20 pt-3 h-30 w-45 opacity-25"/>
+          <img src="/valyrielogo.png" alt="Valkyrie Logo" className="absolute ml-20 pt-2 h-30 w-45 opacity-75 "/>
         </div>
 
         {/* Download Options Card */}
