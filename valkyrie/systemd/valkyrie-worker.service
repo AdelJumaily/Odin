@@ -4,9 +4,11 @@ After=docker.service
 Requires=docker.service
 
 [Service]
-Type=oneshot
-RemainAfterExit=yes
+# Load environment variables from user's valkyrie .env so host-port and other overrides apply.
+EnvironmentFile=-%h/valkyrie/.env
 WorkingDirectory=%h/valkyrie
+Type=simple
+RemainAfterExit=yes
 ExecStart=/usr/bin/docker compose -f docker-compose.yml up -d --build worker
 ExecStop=/usr/bin/docker compose -f docker-compose.yml stop worker || /usr/bin/docker compose -f docker-compose.yml down
 TimeoutStartSec=600

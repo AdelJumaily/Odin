@@ -49,6 +49,15 @@ mkdir -p database/local
 mkdir -p valkyrie_data || true
 
 echo "Starting docker compose"
+# Validate compose file and interpolated env before starting
+echo "Validating docker-compose configuration (this checks ${COMPOSE_FILES[*]})"
+if ! ${DOCKER_COMPOSE_CMD[@]} "${COMPOSE_FILES[@]}" config >/dev/null 2>&1; then
+  echo "docker compose configuration validation failed. Run 'docker compose config' for details." >&2
+  ${DOCKER_COMPOSE_CMD[@]} "${COMPOSE_FILES[@]}" config || true
+  exit 1
+fi
+
+echo "Bringing up docker compose stack"
 ${DOCKER_COMPOSE_CMD[@]} "${COMPOSE_FILES[@]}" up -d --build
 
 echo "Waiting for Postgres to become available (timeout 120s)"

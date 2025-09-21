@@ -49,6 +49,26 @@ Environment variables (with defaults) are loaded from `.env`:
 - `VALKYRIE_STORAGE_PATH` � filesystem path for uploaded documents (`data/uploads`).
 - `VALKYRIE_MAIL_BACKEND` � defaults to console logging.
 
+Port configuration
+------------------
+
+You can override host-side port mappings used by `docker compose` by setting environment variables in your `.env` file (the installer copies `env.docker` -> `.env` if missing). Example variables and defaults:
+
+```
+POSTGRES_HOST_PORT=5432
+REDIS_HOST_PORT=6379
+NEO4J_HTTP_HOST_PORT=7474
+NEO4J_BOLT_HOST_PORT=7687
+MAILPIT_HTTP_HOST_PORT=8025
+MAILPIT_SMTP_HOST_PORT=1025
+API_HOST_PORT=6789
+FRONTEND_HOST_PORT=3000
+HTTP_HOST_PORT=80
+HTTPS_HOST_PORT=443
+```
+
+Set any of these in `.env` to avoid host port conflicts before running `./install.sh`.
+
 ## Core API Highlights
 
 - `POST /auth/login` � password login, sets session cookie.

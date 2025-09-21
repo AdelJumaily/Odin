@@ -125,10 +125,10 @@ const SearchBar = ({ onSearch, searchQuery, onClear }) => {
                 className="input text-sm"
               >
                 <option value="">Any size</option>
-                <option value="small">Small (< 1MB)</option>
+                <option value="small">Small (&lt; 1MB)</option>
                 <option value="medium">Medium (1-10MB)</option>
                 <option value="large">Large (10-100MB)</option>
-                <option value="xlarge">Very Large (> 100MB)</option>
+                <option value="xlarge">Very Large (&gt; 100MB)</option>
               </select>
             </div>
           </div>

@@ -96,6 +96,26 @@ Quick start (recommended for evaluation)
 
   - If the server is memory constrained, consider disabling non-critical services or using lighter images in `docker-compose.yml`.
 
+  Port overrides
+  --------------
+
+  You can avoid host port conflicts by setting the following environment variables in your `.env` (the installer copies `env.docker` to `.env` if missing). Example names and defaults are:
+
+  ```
+  POSTGRES_HOST_PORT=5432
+  REDIS_HOST_PORT=6379
+  NEO4J_HTTP_HOST_PORT=7474
+  NEO4J_BOLT_HOST_PORT=7687
+  MAILPIT_HTTP_HOST_PORT=8025
+  MAILPIT_SMTP_HOST_PORT=1025
+  API_HOST_PORT=6789
+  FRONTEND_HOST_PORT=3000
+  HTTP_HOST_PORT=80
+  HTTPS_HOST_PORT=443
+  ```
+
+  Set any values you need to change before running `./install.sh`.
+
   Networking and hostname
   - If you want `valkyrie.local` or another friendly name to resolve to the server, update your DNS or `/etc/hosts` on client machines, or use a Tailscale hostname (recommended for simple remote access without public DNS).
 

@@ -12,11 +12,28 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // DEVELOPMENT MODE - Always authenticated
+  const DEV_MODE = true;
+  
+  const [user, setUser] = useState(DEV_MODE ? {
+    id: 1,
+    name: 'Developer',
+    role: 'ceo',
+    apiKey: 'dev-mode-key'
+  } : null);
+  
+  const [isLoading, setIsLoading] = useState(DEV_MODE ? false : true);
+  const [isAuthenticated, setIsAuthenticated] = useState(DEV_MODE ? true : false);
 
   useEffect(() => {
+    if (DEV_MODE) {
+      // Development mode - set up mock user immediately
+      apiService.setApiKey('dev-mode-key');
+      apiService.setCurrentUser(user);
+      return;
+    }
+
+    // Production mode - normal authentication
     const initAuth = async () => {
       const savedUser = apiService.getCurrentUser();
       const apiKey = localStorage.getItem('odin_api_key');

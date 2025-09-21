@@ -7,6 +7,8 @@ export default {
   theme: {
     extend: {
       colors: {
+        background: '#f9fafb',
+        ring: '#e6e6e6',
         primary: {
           50: '#eff6ff',
           100: '#dbeafe',
@@ -30,6 +32,7 @@ export default {
           700: '#374151',
           800: '#1f2937',
           900: '#111827',
+          950: '#030712',
         }
       }
     },

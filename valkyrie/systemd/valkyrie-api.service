@@ -4,9 +4,12 @@ After=docker.service
 Requires=docker.service
 
 [Service]
-Type=oneshot
-RemainAfterExit=yes
+# Load environment variables from the .env file in the user's home valkyrie folder if present.
+# This ensures host-port overrides and other env vars are respected when systemd starts the stack.
+EnvironmentFile=-%h/valkyrie/.env
 WorkingDirectory=%h/valkyrie
+Type=simple
+RemainAfterExit=yes
 ExecStart=/usr/bin/docker compose -f docker-compose.yml up -d --build
 ExecStop=/usr/bin/docker compose -f docker-compose.yml down
 TimeoutStartSec=600

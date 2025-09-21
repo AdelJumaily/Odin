@@ -1,75 +1,129 @@
 import React from 'react';
-import { Folder, Home, LogOut, User, Settings } from 'lucide-react';
+import { 
+  Home, 
+  Folder, 
+  Star, 
+  Clock, 
+  Trash2, 
+  HardDrive, 
+  Settings,
+  ChevronRight
+} from 'lucide-react';
+import { calculateStorageUsage, getStorageStatus } from '../utils/storage';
 
-const Sidebar = ({ projects, selectedProject, onProjectSelect, user, onLogout }) => {
+const Sidebar = ({ currentPath, onPathChange, onCreateFolder, files = [] }) => {
+  const sidebarItems = [
+    { id: 'home', label: 'Home', icon: Home, path: '/' },
+    { id: 'recent', label: 'Recent', icon: Clock, path: '/recent' },
+    { id: 'starred', label: 'Starred', icon: Star, path: '/starred' },
+    { id: 'trash', label: 'Trash', icon: Trash2, path: '/trash' },
+  ];
+
+  const quickFolders = [
+    { id: 'documents', label: 'Documents', icon: Folder, path: '/documents' },
+    { id: 'images', label: 'Images', icon: Folder, path: '/images' },
+    { id: 'videos', label: 'Videos', icon: Folder, path: '/videos' },
+    { id: 'music', label: 'Music', icon: Folder, path: '/music' },
+  ];
+
+  // Calculate real storage usage
+  const storageInfo = calculateStorageUsage(files);
+  const storageStatus = getStorageStatus(storageInfo.percentage);
+
   return (
-    <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
-      {/* User Info */}
-      <div className="p-6 border-b border-gray-200">
-        <div className="flex items-center space-x-3">
-          <div className="h-10 w-10 bg-primary-100 rounded-full flex items-center justify-center">
-            <User className="h-5 w-5 text-primary-600" />
+    <aside className="sidebar w-64 p-4">
+      <div className="mb-8">
+        <h2 className="text-xl font-bold text-red-primary mb-6">Valkyrie</h2>
+        
+        {/* Storage Info */}
+        <div className="glass-card glass-glow glass-refraction p-4 mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm text-gray-300">Storage Used</span>
+            <span className={`text-sm ${storageStatus.color}`}>
+              {storageInfo.usedFormatted} / {storageInfo.totalFormatted}
+            </span>
           </div>
-          <div>
-            <p className="text-sm font-medium text-gray-900">{user?.name}</p>
-            <p className="text-xs text-gray-500 capitalize">{user?.role}</p>
+          <div className="w-full bg-white/10 rounded-full h-2 backdrop-blur-sm">
+            <div 
+              className={`h-2 rounded-full shadow-lg transition-all duration-500 ${
+                storageInfo.percentage >= 90 ? 'bg-purple-500' :
+                storageInfo.percentage >= 75 ? 'bg-yellow-500' :
+                storageInfo.percentage >= 50 ? 'bg-green-500' : 'bg-blue-500'
+              }`}
+              style={{ width: `${storageInfo.percentage}%` }}
+            ></div>
+          </div>
+          <div className="flex justify-between items-center mt-2">
+            <span className="text-xs text-gray-400">
+              {storageStatus.status.charAt(0).toUpperCase() + storageStatus.status.slice(1)}
+            </span>
+            <span className="text-xs text-gray-400">
+              {storageInfo.remainingFormatted} remaining
+            </span>
           </div>
         </div>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-2">
-        <button
-          onClick={() => onProjectSelect(null)}
-          className={`w-full flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-            !selectedProject
-              ? 'bg-primary-100 text-primary-700'
-              : 'text-gray-700 hover:bg-gray-100'
-          }`}
-        >
-          <Home className="h-4 w-4" />
-          <span>All Files</span>
-        </button>
-
-        <div className="pt-4">
-          <h3 className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-            Projects
-          </h3>
-          <div className="mt-2 space-y-1">
-            {projects.map((project) => (
-              <button
-                key={project.id}
-                onClick={() => onProjectSelect(project)}
-                className={`w-full flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  selectedProject?.id === project.id
-                    ? 'bg-primary-100 text-primary-700'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                <Folder className="h-4 w-4" />
-                <span>{project.name}</span>
-              </button>
-            ))}
-          </div>
-        </div>
+      <nav className="space-y-2">
+        <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">
+          Navigation
+        </h3>
+        {sidebarItems.map(item => (
+          <button
+            key={item.id}
+            onClick={() => onPathChange(item.path)}
+            className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg transition-all duration-300 sidebar-menu-item ${
+              currentPath === item.path 
+                ? 'bg-red-primary text-white shadow-lg active' 
+                : 'text-gray-300 hover:bg-white/10 hover:text-white backdrop-blur-sm'
+            }`}
+          >
+            <item.icon className="w-5 h-5" />
+            <span>{item.label}</span>
+          </button>
+        ))}
       </nav>
 
-      {/* Bottom Actions */}
-      <div className="p-4 border-t border-gray-200 space-y-2">
-        <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors">
-          <Settings className="h-4 w-4" />
+      {/* Quick Folders */}
+      <div className="mt-8">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">
+            Quick Access
+          </h3>
+          <button
+            onClick={onCreateFolder}
+            className="text-gray-400 hover:text-white transition-colors"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+        <div className="space-y-1">
+          {quickFolders.map(folder => (
+            <button
+              key={folder.id}
+              onClick={() => onPathChange(folder.path)}
+              className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg transition-all duration-300 sidebar-menu-item ${
+                currentPath === folder.path 
+                  ? 'bg-red-primary text-white shadow-lg active' 
+                  : 'text-white hover:bg-white/10 hover:text-white backdrop-blur-sm'
+              }`}
+            >
+              <folder.icon className="w-4 h-4" />
+              <span className="text-sm">{folder.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Settings */}
+      <div className="mt-8 pt-6 border-t border-white/20">
+        <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-white hover:bg-white/10 hover:text-white transition-all duration-300 backdrop-blur-sm sidebar-menu-item">
+          <Settings className="w-5 h-5" />
           <span>Settings</span>
         </button>
-        
-        <button
-          onClick={onLogout}
-          className="w-full flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium text-red-700 hover:bg-red-50 transition-colors"
-        >
-          <LogOut className="h-4 w-4" />
-          <span>Sign Out</span>
-        </button>
       </div>
-    </div>
+    </aside>
   );
 };
 
