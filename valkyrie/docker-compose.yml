@@ -4,6 +4,10 @@ services:
     build:
       context: ./postgres
       dockerfile: Dockerfile
+    # Run as root briefly to ensure the data directory is owned by the postgres user
+    # This helps when the underlying volume/mount doesn't preserve permissions correctly.
+    user: root
+    entrypoint: ["/bin/sh", "-c", "chown -R postgres:postgres /var/lib/postgresql/data || true; exec docker-entrypoint.sh postgres"]
     environment:
       POSTGRES_DB: valkyrie
       POSTGRES_USER: valkyrie

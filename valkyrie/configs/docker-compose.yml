@@ -6,6 +6,9 @@ services:
       POSTGRES_DB: valkyrie
       POSTGRES_USER: valkyrie
       POSTGRES_PASSWORD: valkyrie
+    # Workaround: run as root briefly to chown the data dir so postgres can start
+    user: root
+    entrypoint: ["/bin/sh", "-c", "chown -R postgres:postgres /var/lib/postgresql/data || true; exec docker-entrypoint.sh postgres"]
     ports:
       - "${POSTGRES_HOST_PORT:-5432}:5432"
     volumes:
