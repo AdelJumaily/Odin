@@ -7,6 +7,7 @@ from .routers import health
 from .routers.ingest import router as ingest_router
 from .routers.download import router as download_router
 from .routers.list import router as list_router
+from .routers.auth import router as auth_router
 
 import logging
 logger = logging.getLogger("uvicorn.error")
@@ -80,6 +81,7 @@ def startup():
         raise
 
 app.include_router(health.router)
+app.include_router(auth_router)
 app.include_router(ingest_router)
 app.include_router(list_router)
 app.include_router(download_router)
