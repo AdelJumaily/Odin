@@ -47,7 +47,7 @@ export default function Hero() {
           <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 space-x-0 md:space-x-4 justify-center">
             <a 
               href="/login"
-              className="w-40 h-12 rounded-full bg-black border border-[#e01300] text-white text-sm font-semibold hover:bg-[#e01300] transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-[#e01300]/25 flex items-center justify-center"
+              className="w-40 h-12 rounded-full bg-[#e01300] border border-[#e01300] text-white text-sm font-semibold hover:bg-[#e01300] transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-[#e01300]/25 flex items-center justify-center"
             >
               Get Started
             </a>
