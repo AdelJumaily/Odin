@@ -43,9 +43,9 @@ export function WhatWeDo() {
               <div className="flex items-start gap-4">
                 <div className="mt-3 h-2 w-2 flex-shrink-0 rounded-full bg-[#e01300]" />
                 <div>
-                  <h3 className="mb-2 text-lg font-semibold text-white">24/7 Monitoring</h3>
+                  <h3 className="mb-2 text-lg font-semibold text-white">Team Complience</h3>
                   <p className="text-neutral-400">
-                    Continuous surveillance of your global infrastructure with AI-powered threat detection.
+                    Only people with regested access and view, edit, and save your data.
                   </p>
                 </div>
               </div>
@@ -53,9 +53,9 @@ export function WhatWeDo() {
               <div className="flex items-start gap-4">
                 <div className="mt-3 h-2 w-2 flex-shrink-0 rounded-full bg-[#e01300]" />
                 <div>
-                  <h3 className="mb-2 text-lg font-semibold text-white">Instant Response</h3>
+                  <h3 className="mb-2 text-lg font-semibold text-white">Instant Access</h3>
                   <p className="text-neutral-400">
-                    Automated incident response and threat mitigation across all connected locations.
+                    Our in-house developed knowleage graphs allow quick and effortless access to your data.
                   </p>
                 </div>
               </div>
@@ -63,9 +63,9 @@ export function WhatWeDo() {
               <div className="flex items-start gap-4">
                 <div className="mt-3 h-2 w-2 flex-shrink-0 rounded-full bg-[#e01300]" />
                 <div>
-                  <h3 className="mb-2 text-lg font-semibold text-white">Global Coverage</h3>
+                  <h3 className="mb-2 text-lg font-semibold text-white">Local Hosting</h3>
                   <p className="text-neutral-400">
-                    Security operations spanning 6 continents with local expertise and compliance.
+                    Local, on-site hosting for your sensitve, propritery data.
                   </p>
                 </div>
               </div>
