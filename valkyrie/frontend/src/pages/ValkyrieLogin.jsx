@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Lock, ArrowRight, Eye, EyeOff, ChevronDown } from 'lucide-react';
+import { Lock, ArrowRight, Eye, EyeOff, ChevronDown, AlertCircle } from 'lucide-react';
 import { TextHoverEffect } from '../components/ui/text-hover-effect';
 import { Vortex } from '../components/ui/vortex';
 import EncryptionPlaceholder from '../components/EncryptionPlaceholder';
@@ -13,6 +13,8 @@ const ValkyrieLogin = ({ onLogin }) => {
   const [scrollY, setScrollY] = useState(0);
   const [showApiKey, setShowApiKey] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -34,27 +36,110 @@ const ValkyrieLogin = ({ onLogin }) => {
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-    if (apiKey.trim() && masterPassword.trim()) {
-      setCurrentStep(2);
-      setShowLoading(true);
-      setIsLoading(true);
-      // Simulate loading for 3 seconds
-      setTimeout(() => {
-        onLogin({ apiKey, masterPassword });
-      }, 3000);
+    setErrorMessage('');
+    
+    // Validate API key
+    if (!apiKey.trim()) {
+      setErrorMessage('Please enter your API key');
+      return;
     }
+    
+    // Validate master password
+    if (!masterPassword.trim()) {
+      setErrorMessage('Please enter your master password');
+      return;
+    }
+    
+    // Basic validation for API key format (should be at least 20 characters and contain alphanumeric characters)
+    if (apiKey.trim().length < 20) {
+      setErrorMessage('API key must be at least 20 characters long');
+      return;
+    }
+    
+    // Check if API key contains only valid characters (alphanumeric, hyphens, underscores)
+    if (!/^[a-zA-Z0-9_-]+$/.test(apiKey.trim())) {
+      setErrorMessage('API key can only contain letters, numbers, hyphens, and underscores');
+      return;
+    }
+    
+    // Basic validation for master password (should be at least 8 characters)
+    if (masterPassword.trim().length < 8) {
+      setErrorMessage('Master password must be at least 8 characters long');
+      return;
+    }
+    
+    // Check if master password contains at least one letter and one number
+    if (!/(?=.*[a-zA-Z])(?=.*\d)/.test(masterPassword.trim())) {
+      setErrorMessage('Master password must contain at least one letter and one number');
+      return;
+    }
+    
+    startTransitionAnimation();
+  };
+
+  const startTransitionAnimation = () => {
+    setIsAnimating(true);
+    setCurrentStep(2);
+    setShowLoading(true);
+    setIsLoading(true);
+    
+    // Complete transition after 3 seconds
+    setTimeout(() => {
+      onLogin({ apiKey: apiKey || 'demo-key', masterPassword: masterPassword || 'demo-password' });
+    }, 3000);
   };
 
   const handleBack = () => {
     if (currentStep === 1) {
       setCurrentStep(0);
       setShowApiKey(false);
+      setErrorMessage('');
       window.scrollTo({
         top: 0,
         behavior: 'smooth'
       });
     }
   };
+
+  const clearError = () => {
+    setErrorMessage('');
+  };
+
+  // Show full screen authentication page
+  if (currentStep === 2 && showLoading) {
+    return (
+      <div className="w-full h-screen overflow-hidden relative">
+        {/* Glow effects */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-blue-500/20 blur-3xl -z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-[#a123f6]/10 via-transparent to-blue-500/10 blur-2xl -z-10"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl -z-10"></div>
+        <Vortex
+          backgroundColor="black"
+          rangeY={800}
+          particleCount={200}
+          baseHue={240}
+          className="flex items-center flex-col justify-center px-2 md:px-10 py-4 w-full h-full"
+        >
+          {/* Authentication Screen */}
+          <div className="h-screen flex items-center justify-center p-4">
+            <div className="text-center">
+              <div className="mb-8">
+                <div className="w-32 h-32 mx-auto mb-8">
+                  <div className="w-full h-full rounded-full border-4 border-blue-400 animate-pulse" 
+                       style={{
+                         boxShadow: '0 0 20px #3b82f6, 0 0 40px #3b82f6, 0 0 60px #3b82f6',
+                         borderColor: '#3b82f6'
+                       }}>
+                  </div>
+                </div>
+                <h2 className="text-3xl font-bold text-white mb-2">Authenticating</h2>
+              </div>
+            </div>
+          </div>
+        </Vortex>
+      </div>
+    );
+  }
 
   return (
     <div className="w-[calc(100%-4rem)] mx-auto rounded-md h-screen overflow-hidden relative">
@@ -110,14 +195,16 @@ const ValkyrieLogin = ({ onLogin }) => {
                   API Key
                 </label>
                 <div className="relative">
-                  <input
-                    type="text"
-                    value={apiKey}
-                    onChange={(e) => setApiKey(e.target.value)}
-                    className="input w-full"
-                    placeholder=""
-                    required
-                  />
+                                <input
+                                  type="text"
+                                  value={apiKey}
+                                  onChange={(e) => {
+                                    setApiKey(e.target.value);
+                                    clearError();
+                                  }}
+                                  className={`input w-full ${errorMessage && errorMessage.includes('API key') ? 'border-red-500 focus:ring-red-500' : ''}`}
+                                  placeholder=""
+                                />
                   {!apiKey && (
                     <div className="absolute inset-0 flex items-center px-3 pointer-events-none">
                       <EncryptionPlaceholder 
@@ -127,6 +214,7 @@ const ValkyrieLogin = ({ onLogin }) => {
                     </div>
                   )}
                 </div>
+                <p className="text-xs text-gray-500 mt-1">API key must be at least 20 characters long</p>
               </div>
 
               <div>
@@ -134,14 +222,16 @@ const ValkyrieLogin = ({ onLogin }) => {
                   Master Password
                 </label>
                 <div className="relative">
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    value={masterPassword}
-                    onChange={(e) => setMasterPassword(e.target.value)}
-                    className="input w-full pr-12"
-                    placeholder=""
-                    required
-                  />
+                                <input
+                                  type={showPassword ? 'text' : 'password'}
+                                  value={masterPassword}
+                                  onChange={(e) => {
+                                    setMasterPassword(e.target.value);
+                                    clearError();
+                                  }}
+                                  className={`input w-full pr-12 ${errorMessage && errorMessage.includes('password') ? 'border-red-500 focus:ring-red-500' : ''}`}
+                                  placeholder=""
+                                />
                   {!masterPassword && (
                     <div className="absolute inset-0 flex items-center px-3 pointer-events-none">
                       <EncryptionPlaceholder 
@@ -158,71 +248,37 @@ const ValkyrieLogin = ({ onLogin }) => {
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
                 </div>
+                <p className="text-xs text-gray-500 mt-1">Password must be at least 8 characters with letters and numbers</p>
               </div>
 
-              <div className="flex space-x-4">
-                <button
-                  type="button"
-                  onClick={handleBack}
-                  className="glass-button flex-1 text-white py-3 rounded-xl"
-                >
-                  Back
-                </button>
-                <button
-                  type="submit"
-                  className="glass-button flex-1 flex items-center justify-center space-x-2 text-white py-3 rounded-xl"
-                >
-                  <span>Authenticate</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
+              {errorMessage && (
+                <div className="mb-4 p-3 rounded-lg bg-red-500/20 text-red-400 border border-red-500/30 flex items-center space-x-2">
+                  <AlertCircle className="w-4 h-4" />
+                  <span className="text-sm">{errorMessage}</span>
+                </div>
+              )}
+
+                            <div className="flex space-x-4">
+                              <button
+                                type="button"
+                                onClick={handleBack}
+                                className="glass-button flex-1 text-white py-3 rounded-xl"
+                              >
+                                Back
+                              </button>
+                              <button
+                                type="submit"
+                                className="glass-button flex-1 flex items-center justify-center space-x-2 text-white py-3 rounded-xl"
+                              >
+                                <span>Authenticate</span>
+                                <ArrowRight className="w-4 h-4" />
+                              </button>
+                            </div>
             </form>
           </div>
         </div>
       </div>
 
-      {/* Loading Section */}
-      {currentStep === 2 && (
-        <div className="h-screen flex items-center justify-center p-4 relative">
-          <div className="w-full max-w-md">
-            <div className={`glass-card p-8 rounded-2xl text-center ${showLoading ? 'animate-fly-up' : 'opacity-0 translate-y-full'}`}>
-              <div className="mb-6">
-                <div className="relative w-24 h-24 mx-auto mb-6">
-                  {/* Outer ring */}
-                  <div className="absolute inset-0 rounded-full border-2 border-gray-700"></div>
-                  {/* Animated outer ring */}
-                  <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-purple-500 animate-spin-slow"></div>
-                  {/* Inner ring */}
-                  <div className="absolute inset-2 rounded-full border-2 border-gray-600"></div>
-                  {/* Animated inner ring */}
-                  <div className="absolute inset-2 rounded-full border-2 border-transparent border-t-blue-500 animate-spin-reverse"></div>
-                  {/* Center dot */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse-dot"></div>
-                  </div>
-                </div>
-                <h2 className="text-2xl font-bold text-white mb-2">Authenticating</h2>
-                <p className="text-gray-400">Please wait while we verify your credentials...</p>
-              </div>
-
-              <div className="space-y-3">
-                <div className="flex items-center justify-center space-x-3 text-sm text-gray-400">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse-dot"></div>
-                  <span>Validating API key</span>
-                </div>
-                <div className="flex items-center justify-center space-x-3 text-sm text-gray-400">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse-dot" style={{ animationDelay: '0.5s' }}></div>
-                  <span>Verifying master password</span>
-                </div>
-                <div className="flex items-center justify-center space-x-3 text-sm text-gray-400">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse-dot" style={{ animationDelay: '1s' }}></div>
-                  <span>Initializing secure session</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
       </Vortex>
     </div>
   );
