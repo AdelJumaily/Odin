@@ -50,9 +50,9 @@ const ValkyrieLogin = ({ onLogin }) => {
       return;
     }
     
-    // Basic validation for API key format (should be at least 20 characters and contain alphanumeric characters)
-    if (apiKey.trim().length < 20) {
-      setErrorMessage('API key must be at least 20 characters long');
+    // Basic validation for API key format (should be at least 15 characters and contain alphanumeric characters)
+    if (apiKey.trim().length < 15) {
+      setErrorMessage('API key must be at least 15 characters long');
       return;
     }
     
@@ -214,7 +214,7 @@ const ValkyrieLogin = ({ onLogin }) => {
                     </div>
                   )}
                 </div>
-                <p className="text-xs text-gray-500 mt-1">API key must be at least 20 characters long</p>
+                <p className="text-xs text-gray-500 mt-1">API key must be at least 15 characters long</p>
               </div>
 
               <div>

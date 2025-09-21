@@ -39,10 +39,10 @@ const SetupPage = ({ onSetupComplete }) => {
 
   const generateApiKeys = () => {
     const keys = {
-      ceo: `ceo-${Math.random().toString(36).substr(2, 12)}`,
-      editor: `editor-${Math.random().toString(36).substr(2, 12)}`,
-      viewer: `viewer-${Math.random().toString(36).substr(2, 12)}`,
-      admin: `admin-${Math.random().toString(36).substr(2, 12)}`
+      ceo: `ceo-${Math.random().toString(36).substr(2, 16)}`,
+      editor: `editor-${Math.random().toString(36).substr(2, 16)}`,
+      viewer: `viewer-${Math.random().toString(36).substr(2, 16)}`,
+      admin: `admin-${Math.random().toString(36).substr(2, 16)}`
     };
     setApiKeys(keys);
     return keys;
