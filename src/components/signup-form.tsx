@@ -155,7 +155,7 @@ export function SignupForm({
           <Input 
             id="email" 
             type="email" 
-            placeholder="dreadtristan@example.com" 
+            placeholder="johndoe123@org.com" 
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required 
@@ -242,7 +242,7 @@ export function SignupForm({
         )}
         <Button 
           type="submit" 
-          className="w-full h-11 text-sm font-medium"
+          className="w-full h-11 text-md font-medium text-white bg-transparent border-2 border-[#a123f6] hover:bg-[#a123f6] transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-[#e01300]/25"
           disabled={isLoading}
         >
           {isLoading ? "Creating account..." : "Create account"}
