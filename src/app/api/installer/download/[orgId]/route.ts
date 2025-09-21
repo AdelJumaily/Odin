@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { execSync } from 'child_process';
+import path from 'path';
+import fs from 'fs';
 
 export async function GET(
   request: NextRequest,
@@ -11,46 +14,46 @@ export async function GET(
       return NextResponse.json({ error: 'orgId is required' }, { status: 400 });
     }
     
-    // For now, we'll return a simple text file with installation instructions
-    // In production, you would stream the actual ZIP file from storage
-    const installerContent = `# Odin File Manager Installer
-
-Organization: ${orgId}
-Generated: ${new Date().toISOString()}
-
-## Installation Instructions
-
-1. Extract this file to your desired location
-2. Run the start script:
-   - Windows: double-click start.bat
-   - Mac/Linux: run ./start.sh in terminal
-3. Wait for "File Manager started!" message
-4. Open your browser to http://appliance.local:3001 or http://localhost:3001
-
-## Features Included
-
-- End-to-End Encryption
-- Secure File Sharing
-- Advanced Search
-- Folder Management
-- Version Control
-- Access Control
-- Local Control
-
-## Security
-
-- All files are encrypted using AES-256-CBC encryption
-- Each file has its own unique encryption key
-- Complete control over your data, no cloud dependency
-
-For support, contact your Odin administrator.
-`;
+    // Check if ZIP already exists
+    const zipPath = path.join(process.cwd(), 'public', `odin-valkyrie-${orgId}.zip`);
     
-    return new NextResponse(installerContent, {
+    if (!fs.existsSync(zipPath)) {
+      // Create the Valkyrie package
+      console.log(`Creating Valkyrie package for org: ${orgId}`);
+      
+      try {
+        // Run the package creation script
+        execSync(`node scripts/create-valkyrie-package.js ${orgId}`, {
+          cwd: process.cwd(),
+          stdio: 'pipe'
+        });
+      } catch (error) {
+        console.error('Error creating package:', error);
+        return NextResponse.json(
+          { error: 'Failed to create installer package' }, 
+          { status: 500 }
+        );
+      }
+    }
+    
+    // Check if ZIP was created successfully
+    if (!fs.existsSync(zipPath)) {
+      return NextResponse.json(
+        { error: 'Installer package not found' }, 
+        { status: 404 }
+      );
+    }
+    
+    // Read the ZIP file
+    const zipBuffer = fs.readFileSync(zipPath);
+    
+    // Return the ZIP file
+    return new NextResponse(zipBuffer, {
       status: 200,
       headers: {
-        'Content-Type': 'text/plain',
-        'Content-Disposition': `attachment; filename="odin-file-manager-${orgId}.txt"`,
+        'Content-Type': 'application/zip',
+        'Content-Disposition': `attachment; filename="odin-valkyrie-${orgId}.zip"`,
+        'Content-Length': zipBuffer.length.toString(),
       },
     });
     
