@@ -25,7 +25,7 @@ export default function Home() {
         <div className="relative z-10 flex items-center justify-center h-full px-16 sm:px-24 lg:px-32 xl:px-40">
           <div className="max-w-5xl mx-auto text-center">
             {/* Subtitle */}
-            <p className="text-neutral-300 text-base sm:text-lg mb-10">
+            <p className="text-neutral-300 text-base sm:text-lg mb-5">
               Secure File Management for Organizations
             </p>
             
@@ -40,13 +40,13 @@ export default function Home() {
             <div className="relitive flex flex-col gap-5 sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 justify-center items-center">
               <a 
                 href="/signup"
-                className="w-56 h-14 rounded-full bg-transparent border-2 border-[#e01300] text-white text-base font-semibold hover:bg-[#e01300] transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-[#e01300]/25 flex items-center justify-center"
+                className="w-56 h-14 bg-gradient-to-br from-[#e01300]/20 to-black rounded-full border-2 border-[#e01300] text-white text-base font-semibold hover:bg-[#e01300] transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-[#e01300]/25 flex items-center justify-center"
               >
                 Get Started
               </a>
               <a 
                 href="#learn-more"
-                className="w-56 h-14 rounded-full bg-transparent text-white border-2 border-white text-base font-semibold hover:bg-white hover:text-black transition-all duration-300 transform hover:scale-105 flex items-center justify-center"
+                className="w-56 h-14 rounded-full bg-gradient-to-br from-white/20 to-black text-white border-2 border-white text-base font-semibold hover:bg-white hover:text-black transition-all duration-300 transform hover:scale-105 flex items-center justify-center"
               >
                 Learn More
               </a>
