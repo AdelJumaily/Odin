@@ -1,7 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { execSync } from 'child_process';
-import path from 'path';
-import fs from 'fs';
 
 export async function GET(
   request: NextRequest,
@@ -14,48 +11,16 @@ export async function GET(
       return NextResponse.json({ error: 'orgId is required' }, { status: 400 });
     }
     
-    // Check if ZIP already exists
-    const zipPath = path.join(process.cwd(), 'public', `odin-valkyrie-${orgId}.zip`);
+    // For Vercel deployment, redirect to the static ZIP file
+    // The ZIP file is pre-generated and stored in the public directory
+    const baseUrl = process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}` 
+      : 'https://odin-weld-beta.vercel.app';
     
-    if (!fs.existsSync(zipPath)) {
-      // Create the Valkyrie package
-      console.log(`Creating Valkyrie package for org: ${orgId}`);
-      
-      try {
-        // Run the package creation script
-        execSync(`node scripts/create-valkyrie-package.js ${orgId}`, {
-          cwd: process.cwd(),
-          stdio: 'pipe'
-        });
-      } catch (error) {
-        console.error('Error creating package:', error);
-        return NextResponse.json(
-          { error: 'Failed to create installer package' }, 
-          { status: 500 }
-        );
-      }
-    }
+    const downloadUrl = `${baseUrl}/odin-valkyrie-default.zip`;
     
-    // Check if ZIP was created successfully
-    if (!fs.existsSync(zipPath)) {
-      return NextResponse.json(
-        { error: 'Installer package not found' }, 
-        { status: 404 }
-      );
-    }
-    
-    // Read the ZIP file
-    const zipBuffer = fs.readFileSync(zipPath);
-    
-    // Return the ZIP file
-    return new NextResponse(zipBuffer, {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/zip',
-        'Content-Disposition': `attachment; filename="odin-valkyrie-${orgId}.zip"`,
-        'Content-Length': zipBuffer.length.toString(),
-      },
-    });
+    // Return a redirect response to the static file
+    return NextResponse.redirect(downloadUrl, 302);
     
   } catch (error) {
     console.error('Error downloading installer:', error);

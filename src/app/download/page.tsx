@@ -96,14 +96,14 @@ function DownloadContent() {
                 </p>
                 <div className="space-y-2 text-xs font-mono opacity-70 mb-4">
                   <div>Platform: {platform}</div>
-                  <div>Size: ~150MB</div>
-                  <div>Type: Executable + Instructions</div>
+                  <div>Size: ~7MB</div>
+                  <div>Type: Complete System Package</div>
                 </div>
                 <button 
                   onClick={() => {
                     // Trigger download of the Valkyrie system
                     const link = document.createElement('a');
-                    link.href = '/api/installer/download/' + (orgId || 'org_1758409386964_o0nyeae7k');
+                    link.href = '/odin-valkyrie-default.zip';
                     link.download = 'odin-valkyrie-file-manager.zip';
                     document.body.appendChild(link);
                     link.click();
