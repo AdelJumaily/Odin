@@ -18,20 +18,21 @@ except Exception as exc:
 	search_router = None
 	logger.warning("Optional search router not available: %s", exc, exc_info=True)
 
+# Add SQLAlchemy exception imports
 from sqlalchemy.exc import ProgrammingError, SQLAlchemyError
 
 app = FastAPI(title="Odin Valkyrie", version="0.1")
 
-# Add explicit exception handlers for DB errors to log full trace for diagnosis
+# Log full DB ProgrammingError traceback, return concise JSON to client
 @app.exception_handler(ProgrammingError)
 async def sqlalchemy_programming_error_handler(request: Request, exc: ProgrammingError):
-    logger.exception("Database ProgrammingError during request %s %s", request.method, request.url, exc_info=exc)
-    # Return a concise error to client while full details are in logs
-    return JSONResponse(status_code=500, content={"detail": f"database error: {exc.__class__.__name__}"})
+    logger.exception("Database ProgrammingError during %s %s", request.method, request.url, exc_info=exc)
+    return JSONResponse(status_code=500, content={"detail": "database error: ProgrammingError"})
 
+# Catch other SQLAlchemy errors as well
 @app.exception_handler(SQLAlchemyError)
 async def sqlalchemy_error_handler(request: Request, exc: SQLAlchemyError):
-    logger.exception("SQLAlchemyError during request %s %s", request.method, request.url, exc_info=exc)
+    logger.exception("SQLAlchemyError during %s %s", request.method, request.url, exc_info=exc)
     return JSONResponse(status_code=500, content={"detail": "database error: SQLAlchemyError"})
 
 @app.on_event("startup")
