@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Eye, EyeOff } from "lucide-react"
+import { LinearGradient } from 'react-text-gradients'
 
 export function SignupForm({
   className,
@@ -132,7 +133,7 @@ export function SignupForm({
   return (
     <form className={cn("flex flex-col gap-8", className)} onSubmit={handleSubmit} {...props}>
       <div className="flex flex-col items-center gap-3 text-center">
-        <h1 className="text-3xl font-bold tracking-tight">Create your account</h1>
+        <h1 className="text-3xl font-bold tracking-tight"><LinearGradient gradient={['to right', '#a123f6 ,#5116f6']} fallbackColor="#a123f6">Create your account</LinearGradient></h1>  
         <p className="text-muted-foreground text-sm text-balance max-w-sm">
           Enter your details below to create your account
         </p>
@@ -155,7 +156,7 @@ export function SignupForm({
           <Input 
             id="email" 
             type="email" 
-            placeholder="dreadtristan@example.com" 
+            placeholder="johndoe123@org.com" 
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required 
@@ -242,7 +243,7 @@ export function SignupForm({
         )}
         <Button 
           type="submit" 
-          className="w-full h-11 text-sm font-medium"
+          className="w-full h-11 text-md font-medium text-white bg-transparent border-2 border-[#a123f6] hover:bg-[#a123f6] transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-[#e01300]/25"
           disabled={isLoading}
         >
           {isLoading ? "Creating account..." : "Create account"}
