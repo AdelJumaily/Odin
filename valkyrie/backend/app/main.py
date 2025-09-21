@@ -35,6 +35,12 @@ async def sqlalchemy_error_handler(request: Request, exc: SQLAlchemyError):
     logger.exception("SQLAlchemyError during %s %s", request.method, request.url, exc_info=exc)
     return JSONResponse(status_code=500, content={"detail": "database error: SQLAlchemyError"})
 
+# Add a global exception handler to ensure full tracebacks are logged
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.exception("Unhandled exception during %s %s", request.method, request.url, exc_info=exc)
+    return JSONResponse(status_code=500, content={"detail": "internal server error"})
+
 @app.on_event("startup")
 def startup():
     try:
