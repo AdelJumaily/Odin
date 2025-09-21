@@ -1,7 +1,9 @@
 version: "3.9"
 services:
   postgres:
-    image: postgres:15
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
     environment:
       POSTGRES_DB: valkyrie
       POSTGRES_USER: valkyrie
@@ -54,7 +56,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "6789"]
+    command: ["uvicorn", "apps.api.main:app", "--host", "0.0.0.0", "--port", "6789"]
     env_file:
       - ./.env
     environment:

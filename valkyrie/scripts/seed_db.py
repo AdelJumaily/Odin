@@ -13,10 +13,18 @@ from urllib.parse import urlparse
 import psycopg
 from passlib.hash import bcrypt
 import time
+from datetime import datetime
 
 
 def get_database_url():
-    return os.environ.get("VALKYRIE_DATABASE_URL") or os.environ.get("DATABASE_URL")
+    db = os.environ.get("VALKYRIE_DATABASE_URL") or os.environ.get("DATABASE_URL")
+    if not db:
+        return None
+    # If the value is an SQLAlchemy style URL like
+    # 'postgresql+psycopg://user:pass@host/db' psycopg.connect won't accept the
+    # '+psycopg' driver marker. Convert to a libpq-style URL acceptable to
+    # psycopg by removing the '+psycopg' segment when present.
+    return db.replace("postgresql+psycopg://", "postgresql://")
 
 
 def ensure_tables(conn):
@@ -46,9 +54,12 @@ def seed_admin(conn):
     with conn.cursor() as cur:
         # ensure default project exists
         project_id = str(uuid.uuid4())
+        # Explicitly provide a created_at timestamp to be robust against DB schemas
+        # that may require a non-null value without a server default.
+        created_at = datetime.utcnow()
         cur.execute(
-            "INSERT INTO projects (id, name) VALUES (%s, %s) ON CONFLICT DO NOTHING;",
-            (project_id, "default"),
+            "INSERT INTO projects (id, name, created_at) VALUES (%s, %s, %s) ON CONFLICT DO NOTHING;",
+            (project_id, "default", created_at),
         )
 
         # Check if an admin API key already exists for the default project
