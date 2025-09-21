@@ -20,7 +20,7 @@ export function WhatWeDo() {
                   {titleWords.map((w, i) => (
                     <motion.span
                       key={w}
-                      className="inline-block"
+                      className="inline-block text-white"
                       initial={{ x: -10, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
                       transition={{ duration: 0.5, delay: i * 0.12 }}
@@ -33,15 +33,15 @@ export function WhatWeDo() {
               </h2>
 
               <p className="text-lg leading-relaxed text-neutral-500">
-                Protect your infrastructure worldwide with our autonomous security
-                operations platform. Real-time threat detection and response across
+                Protect your propritery data worldwide with our security
+                operations platform. Locally hosted information and instant access to
                 all continents.
               </p>
             </div>
 
             <div className="space-y-6">
               <div className="flex items-start gap-4">
-                <div className="mt-3 h-2 w-2 flex-shrink-0 rounded-full bg-[#811bf6]" />
+                <div className="mt-3 h-2 w-2 flex-shrink-0 rounded-full bg-[#e01300]" />
                 <div>
                   <h3 className="mb-2 text-lg font-semibold text-white">24/7 Monitoring</h3>
                   <p className="text-neutral-400">
@@ -51,7 +51,7 @@ export function WhatWeDo() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="mt-3 h-2 w-2 flex-shrink-0 rounded-full bg-[#811bf6]" />
+                <div className="mt-3 h-2 w-2 flex-shrink-0 rounded-full bg-[#e01300]" />
                 <div>
                   <h3 className="mb-2 text-lg font-semibold text-white">Instant Response</h3>
                   <p className="text-neutral-400">
@@ -61,7 +61,7 @@ export function WhatWeDo() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="mt-3 h-2 w-2 flex-shrink-0 rounded-full bg-[#811bf6]" />
+                <div className="mt-3 h-2 w-2 flex-shrink-0 rounded-full bg-[#e01300]" />
                 <div>
                   <h3 className="mb-2 text-lg font-semibold text-white">Global Coverage</h3>
                   <p className="text-neutral-400">

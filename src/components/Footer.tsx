@@ -11,7 +11,7 @@ export default function Footer() {
                 alt="Odin Logo" 
                 className="h-8 w-auto"
               />
-              <span className="text-white text-xl font-bold">odin</span>
+              <span className="text-[#e01300] text-xl font-bold">odin</span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
               Advanced cybersecurity platform for modern enterprises. 

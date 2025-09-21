@@ -96,7 +96,7 @@ export function SatelliteTransmission() {
 
       // Data packets flowing up
       for (let i = 0; i < 3; i++) {
-        const packetY = groundStationY - 50 + (time * 0.1 + i * 100) % (satelliteY - groundStationY + 50);
+        const packetY = groundStationY - 50 + (time * 0.1 + i * 100) % (satelliteY - groundStationY + 100);
         const packetX = groundStationX + Math.sin(time * 0.002 + i) * 10;
         
         ctx.fillStyle = "#06b6d4";
@@ -138,9 +138,9 @@ export function SatelliteTransmission() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="text-sm font-medium text-cyan-400"
+          className="text-sm font-medium text-[#e1e1e1]"
         >
-          Ground Station
+          Secure Data Transmission:
         </motion.div>
       </div>
       
@@ -149,7 +149,7 @@ export function SatelliteTransmission() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 1 }}
-          className="text-sm font-medium text-cyan-400"
+          className="text-sm font-medium text-[#e1e1e1]"
         >
           Satellite
         </motion.div>
@@ -160,9 +160,9 @@ export function SatelliteTransmission() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 1.5 }}
-          className="text-xs text-gray-400"
+          className="text-xs text-[#e1e1e1]"
         >
-          Secure Data Transmission
+          Ground Station
         </motion.div>
       </div>
     </div>
