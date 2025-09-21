@@ -11,7 +11,6 @@ const nextConfig: NextConfig = {
     // your project has type errors.
     ignoreBuildErrors: true,
   },
-  outputFileTracingRoot: '/Users/adeljumaily/Desktop/odin',
 };
 
 export default nextConfig;
