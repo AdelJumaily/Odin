@@ -108,13 +108,13 @@ export default function Navbar() {
             </Popover>
           </div>
 
-          <div className="absolute left-6 flex items-center justify-center h-full">
-              <a href="#">
-                <img src="/odin_logo.png" alt="Odin Logo" className="h-13 w-13"/>
+          <div className="absolute left-6 flex items-center gap-3 h-full">
+              <a href="#" className="flex items-center gap-3">
+                <img src="/odin_logo.png" alt="Odin Logo" className="h-12 w-12"/>
+                <p className="text-4xl font-bold">
+                  <LinearGradient gradient={['to right', '#e01300', '#ff6940']}>odin</LinearGradient>
+                </p>
               </a>
-              <p className="text-[43px] font-[5pt]">
-                <LinearGradient gradient={['to right', '#e01300 ,#ff6940']}>odin</LinearGradient>
-              </p>
           </div>
 
           {/* Centered content: Logo + Nav */}
