@@ -109,7 +109,7 @@ export default function Navbar() {
           </div>
 
           <div className="absolute left-6 flex items-center justify-center h-full">
-              <a className="">
+              <a href="#">
                 <img src="/odin_logo.png" alt="Odin Logo" className="h-13 w-13"/>
               </a>
               <p className="text-[43px] font-[5pt]">
@@ -127,7 +127,7 @@ export default function Navbar() {
             
             {/* Desktop nav */}
             <NavigationMenu className="max-md:hidden">
-              <NavigationMenuList className="gap-20">
+              <NavigationMenuList className="gap-19">
                 {navigationLinks.map((link, index) => (
                   <NavigationMenuItem key={index}>
                     <NavigationMenuLink

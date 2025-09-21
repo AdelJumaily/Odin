@@ -1,0 +1,22 @@
+{
+  "name": "odin-appliance",
+  "version": "1.0.0",
+  "description": "Odin Security Appliance - Self-hosted security operations center",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js --dev",
+    "install-deps": "npm install"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.6",
+    "cors": "^2.8.5",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.2",
+    "crypto": "^1.0.1"
+  },
+  "keywords": ["security", "appliance", "self-hosted"],
+  "author": "Odin Security",
+  "license": "MIT"
+}
