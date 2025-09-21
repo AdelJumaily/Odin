@@ -4,6 +4,7 @@ import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { LinearGradient } from 'react-text-gradients';
 
+
 function DownloadContent() {
   const searchParams = useSearchParams();
   const orgId = searchParams.get('org');
@@ -11,8 +12,10 @@ function DownloadContent() {
   const downloadUrl = searchParams.get('downloadUrl');
   const [downloadStarted, setDownloadStarted] = useState(false);
   const [platform, setPlatform] = useState('macOS');
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
     // Detect platform
     if (typeof window !== 'undefined') {
       const userAgent = window.navigator.userAgent;
@@ -83,21 +86,23 @@ function DownloadContent() {
           <div className="card-shimmer"></div>
           
           <div className="flex items-center gap-4 mb-6 text-2xl font-semibold">
-            Choose Your Platform:
+            Download Valkyrie:
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="flex justify-center">
             {/* Main Download - Desktop/Server */}
-            <div className="download-option active">
+            <div className="download-option active max-w-md">
               <div className="download-option-glow"></div>
-              <div className="text-center p-6">
-                <div className="text-4xl mb-4">🖥️</div>
-                <h3 className="text-xl font-bold mb-2">Main Download</h3>
-                <p className="text-sm opacity-80 mb-4">
+              <div className="text-center p-8">
+                <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl flex items-center justify-center">
+                  <div className="text-3xl font-bold text-white">VM</div>
+                </div>
+                <h3 className="text-2xl font-bold mb-3">Valkyrie File Manager</h3>
+                <p className="text-base opacity-80 mb-6">
                   Complete file management system for desktop and server deployment
                 </p>
-                <div className="space-y-2 text-xs font-mono opacity-70 mb-4">
-                  <div>Platform: {platform}</div>
+                <div className="space-y-3 text-sm font-mono opacity-70 mb-6 bg-black/20 p-4 rounded-lg">
+                  <div>Platform: {isClient ? platform : 'macOS'}</div>
                   <div>Size: ~7MB</div>
                   <div>Type: Complete System Package</div>
                 </div>
@@ -111,62 +116,12 @@ function DownloadContent() {
                     link.click();
                     document.body.removeChild(link);
                   }}
-                  className="w-full bg-gradient-to-r from-[#a123f6] to-[#5116f6] text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                  className="w-full bg-gradient-to-r from-[#a123f6] to-[#5116f6] text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-lg transition-all duration-300 transform hover:scale-105"
                 >
                   Download Now
                 </button>
-                <div className="mt-2 text-xs opacity-60">
-                  ✅ Ready to install
-                </div>
-              </div>
-            </div>
-
-            {/* iOS Download - Coming Soon */}
-            <div className="download-option coming-soon">
-              <div className="text-center p-6">
-                <div className="text-4xl mb-4">📱</div>
-                <h3 className="text-xl font-bold mb-2">iOS App</h3>
-                <p className="text-sm opacity-80 mb-4">
-                  Mobile file management app for iPhone and iPad
-                </p>
-                <div className="space-y-2 text-xs font-mono opacity-70 mb-4">
-                  <div>Platform: iOS 26</div>
-                  <div>Size: ~50MB</div>
-                  <div>Type: App Store</div>
-                </div>
-                <button 
-                  disabled
-                  className="w-full bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold cursor-not-allowed opacity-50"
-                >
-                  Coming Soon
-                </button>
-                <div className="mt-2 text-xs opacity-60">
-                  In development
-                </div>
-              </div>
-            </div>
-
-            {/* Android Download - Coming Soon */}
-            <div className="download-option coming-soon">
-              <div className="text-center p-6">
-                <div className="text-4xl mb-4">🤖</div>
-                <h3 className="text-xl font-bold mb-2">Android App</h3>
-                <p className="text-sm opacity-80 mb-4">
-                  Mobile file management app for Android devices
-                </p>
-                <div className="space-y-2 text-xs font-mono opacity-70 mb-4">
-                  <div>Platform: Android 16</div>
-                  <div>Size: ~45MB</div>
-                  <div>Type: Google Play</div>
-                </div>
-                <button 
-                  disabled
-                  className="w-full bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold cursor-not-allowed opacity-50"
-                >
-                  Coming Soon
-                </button>
-                <div className="mt-2 text-xs opacity-60">
-                  In development
+                <div className="mt-3 text-sm opacity-60">
+                  Ready to install
                 </div>
               </div>
             </div>
@@ -230,12 +185,12 @@ function DownloadContent() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: '🔐', title: 'End-to-End Encryption', desc: 'All files encrypted at rest and in transit' },
-              { icon: '🤖', title: 'Advanced Search', desc: 'AI-powered content search across all files' },
-              { icon: '🔄', title: 'Version Control', desc: 'Track file changes and maintain version history' },
-              { icon: '🤝', title: 'Secure File Sharing', desc: 'Share files with encrypted links and expiration' },
-              { icon: '🏠', title: 'Local Control', desc: 'Complete control over your data, no cloud dependency' },
-              { icon: '👥', title: 'Access Control', desc: 'Granular permissions and user management' }
+              { icon: 'E', title: 'End-to-End Encryption', desc: 'All files encrypted at rest and in transit' },
+              { icon: 'AI', title: 'Advanced Search', desc: 'AI-powered content search across all files' },
+              { icon: 'V', title: 'Version Control', desc: 'Track file changes and maintain version history' },
+              { icon: 'S', title: 'Secure File Sharing', desc: 'Share files with encrypted links and expiration' },
+              { icon: 'L', title: 'Local Control', desc: 'Complete control over your data, no cloud dependency' },
+              { icon: 'A', title: 'Access Control', desc: 'Granular permissions and user management' }
             ].map((feature, index) => (
               <div 
                 key={index}
@@ -244,7 +199,9 @@ function DownloadContent() {
                 <div className="feature-glow"></div>
                 
                 <div className="flex items-center gap-3 mb-3 font-semibold relative z-10">
-                  <span className="text-[#00ff00] text-xl">{feature.icon}</span>
+                  <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                    {feature.icon}
+                  </div>
                   {feature.title}
                 </div>
                 <div className="text-sm opacity-80 leading-relaxed relative z-10">
@@ -296,6 +253,8 @@ function DownloadContent() {
             </div>
           </div>
         </div>
+
+
       </div>
 
       <style jsx>{`
@@ -335,11 +294,11 @@ function DownloadContent() {
           left: 100%;
         }
 
-        /* Animation delays for cards */
-        .download-card { animation-delay: 0s; }
-        .installation-card { animation-delay: 0.1s; }
-        .features-card { animation-delay: 0.2s; }
-        .security-card { animation-delay: 0.3s; }
+                /* Animation delays for cards */
+                .download-card { animation-delay: 0s; }
+                .installation-card { animation-delay: 0.1s; }
+                .features-card { animation-delay: 0.2s; }
+                .security-card { animation-delay: 0.3s; }
 
         /* Header animations */
         .header-animation {
@@ -460,14 +419,16 @@ function DownloadContent() {
           opacity: 1;
         }
 
-        /* Security items */
-        .security-lock {
-          animation: securityPulse 2s infinite;
-        }
+                /* Security items */
+                .security-lock {
+                  animation: securityPulse 2s infinite;
+                }
 
-        .access-note {
-          animation: noteGlow 3s ease-in-out infinite;
-        }
+                .access-note {
+                  animation: noteGlow 3s ease-in-out infinite;
+                }
+
+
 
         /* Keyframe animations */
         @keyframes fadeInDown {

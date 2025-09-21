@@ -8,6 +8,7 @@ from .routers.ingest import router as ingest_router
 from .routers.download import router as download_router
 from .routers.list import router as list_router
 from .routers.auth import router as auth_router
+from .routers.users import router as users_router
 
 import logging
 logger = logging.getLogger("uvicorn.error")
@@ -142,6 +143,7 @@ app.include_router(auth_router, prefix="/api")
 app.include_router(ingest_router, prefix="/api")
 app.include_router(list_router, prefix="/api")
 app.include_router(download_router, prefix="/api")
+app.include_router(users_router, prefix="/api")
 # Only include search router if it imported successfully and is a router instance
 if search_router:
 	app.include_router(search_router, prefix="/api")

@@ -1,31 +1,31 @@
-# Valkyrie API Keys for Test Organization
-# Generated: 2025-09-21T02:41:24.789Z
-# Organization ID: org_test_123
+# Valkyrie API Keys for Demo Organization
+# Generated: 2025-09-21T11:41:05.598Z
+# Organization ID: org_1758454865592_06ar8dhnq
 
 ## 🔑 API Keys
 
 ### CEO Access (Full System)
-API Key: ceo-dbJIPsZwwot9
+API Key: ceo-TXhmRofYCC5K
 Role: ceo
 Access: Full system access - can manage all projects and users
 
 ### Project Manager Access
-API Key: pm-fQsmrkmBOiyt
+API Key: pm-B4uxSXRuKB9H
 Role: editor
 Access: Project management access - can manage assigned projects
 
 ### Developer 1 Access
-API Key: dev1-D9eVjxX9jS
+API Key: dev1-dPxL9Vz15I
 Role: editor
 Access: Development team access - can upload and manage files
 
 ### Developer 2 Access
-API Key: dev2-NQKhi23Yet
+API Key: dev2-uqhqdubsah
 Role: editor
 Access: Development team access - can upload and manage files
 
 ### Intern Access
-API Key: intern-rQNPB4t3
+API Key: intern-yAAm9Rnj
 Role: intern
 Access: Limited access - can view and download files only
 
@@ -33,28 +33,28 @@ Access: Limited access - can view and download files only
 
 ### Apollo Project
 Project ID: 1
-Description: Main project for Test Organization
+Description: Main project for Demo Organization
 
 ### Zephyr Project
 Project ID: 2
-Description: Secondary project for Test Organization
+Description: Secondary project for Demo Organization
 
 ## 📋 Usage Examples
 
 ### Upload a file
 curl -X POST \
-  -H "x-api-key: ceo-dbJIPsZwwot9" \
+  -H "x-api-key: ceo-TXhmRofYCC5K" \
   -F "project_id=1" \
   -F "owner_user_id=1" \
   -F "upload=@/path/to/file.txt" \
   http://localhost:6789/api/ingest
 
 ### List files
-curl -H "x-api-key: ceo-dbJIPsZwwot9" \
+curl -H "x-api-key: ceo-TXhmRofYCC5K" \
   http://localhost:6789/api/list
 
 ### Download a file
-curl -H "x-api-key: ceo-dbJIPsZwwot9" \
+curl -H "x-api-key: ceo-TXhmRofYCC5K" \
   http://localhost:6789/api/download/1
 
 ## 🌐 Web Interface
@@ -67,10 +67,10 @@ Default login: admin / admin123
 - Keep these API keys secure and confidential
 - Each user should only receive their specific API key
 - The CEO key has full system access - use with caution
-- API keys are tied to your organization: Test Organization
+- API keys are tied to your organization: Demo Organization
 - Store this file securely and do not share publicly
 
 ---
 
-Generated for Test Organization (org_test_123)
+Generated for Demo Organization (org_1758454865592_06ar8dhnq)
 Valkyrie File Management System

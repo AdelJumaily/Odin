@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import LoginPage from './pages/LoginPage';
 import ValkyrieLogin from './pages/ValkyrieLogin';
+import SetupPage from './pages/SetupPage';
 import FileExplorer from './pages/FileExplorer';
 import LoadingSpinner from './components/LoadingSpinner';
 
@@ -27,18 +28,47 @@ const ProtectedRoute = ({ children }) => {
 // Main App Routes
 const AppRoutes = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isSetupComplete, setIsSetupComplete] = useState(false);
   const [credentials, setCredentials] = useState(null);
+  const [userData, setUserData] = useState(null);
+
+  // Check if setup is complete on component mount
+  useEffect(() => {
+    const savedUserData = localStorage.getItem('valkyrie_user_data');
+    if (savedUserData) {
+      setUserData(JSON.parse(savedUserData));
+      setIsSetupComplete(true);
+    }
+  }, []);
+
+  const handleSetupComplete = (data) => {
+    setUserData(data);
+    setIsSetupComplete(true);
+    // Auto-login with CEO key
+    setCredentials({
+      apiKey: data.apiKeys.ceo,
+      masterPassword: data.masterPassword
+    });
+    setIsAuthenticated(true);
+  };
 
   const handleLogin = (creds) => {
     setCredentials(creds);
     setIsAuthenticated(true);
   };
 
-  if (!isAuthenticated) {
-    return <ValkyrieLogin onLogin={handleLogin} />;
+  // Show setup page if not completed
+  if (!isSetupComplete) {
+    return <SetupPage onSetupComplete={handleSetupComplete} />;
   }
 
-  return <FileExplorer credentials={credentials} />;
+  // Show login page if setup is complete but not authenticated
+  if (!isAuthenticated) {
+    return <ValkyrieLogin onLogin={handleLogin} userData={userData} />;
+  }
+
+  // Show file explorer if authenticated
+  return <FileExplorer credentials={credentials} userData={userData} />;
 };
 
 // Main App component

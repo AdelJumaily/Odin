@@ -1,38 +1,38 @@
 {
   "organization": {
-    "name": "Test Organization",
-    "id": "org_test_123",
-    "generated": "2025-09-21T02:41:24.785Z"
+    "name": "Demo Organization",
+    "id": "org_1758454865592_06ar8dhnq",
+    "generated": "2025-09-21T11:41:05.592Z"
   },
   "users": [
     {
       "name": "CEO",
       "role": "ceo",
-      "api_key": "ceo-dbJIPsZwwot9",
+      "api_key": "ceo-TXhmRofYCC5K",
       "description": "Full system access - can manage all projects and users"
     },
     {
       "name": "Project Manager",
       "role": "editor",
-      "api_key": "pm-fQsmrkmBOiyt",
+      "api_key": "pm-B4uxSXRuKB9H",
       "description": "Project management access - can manage assigned projects"
     },
     {
       "name": "Developer 1",
       "role": "editor",
-      "api_key": "dev1-D9eVjxX9jS",
+      "api_key": "dev1-dPxL9Vz15I",
       "description": "Development team access - can upload and manage files"
     },
     {
       "name": "Developer 2",
       "role": "editor",
-      "api_key": "dev2-NQKhi23Yet",
+      "api_key": "dev2-uqhqdubsah",
       "description": "Development team access - can upload and manage files"
     },
     {
       "name": "Intern",
       "role": "intern",
-      "api_key": "intern-rQNPB4t3",
+      "api_key": "intern-yAAm9Rnj",
       "description": "Limited access - can view and download files only"
     }
   ],
@@ -40,12 +40,12 @@
     {
       "name": "Apollo",
       "id": 1,
-      "description": "Main project for Test Organization"
+      "description": "Main project for Demo Organization"
     },
     {
       "name": "Zephyr",
       "id": 2,
-      "description": "Secondary project for Test Organization"
+      "description": "Secondary project for Demo Organization"
     }
   ],
   "endpoints": {
