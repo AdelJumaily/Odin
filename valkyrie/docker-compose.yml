@@ -96,7 +96,9 @@ services:
   caddy:
     image: caddy:2
     ports:
-      - "${HTTPS_HOST_PORT:-443}:443"
+      # Default HTTPS to 0 (disabled) since 443 is commonly used
+      - "${HTTPS_HOST_PORT:-0}:443"
+      # Default HTTP to 80 but can be disabled with HTTP_HOST_PORT=0
       - "${HTTP_HOST_PORT:-80}:80"
     volumes:
       - ./configs/Caddyfile:/etc/caddy/Caddyfile:ro
