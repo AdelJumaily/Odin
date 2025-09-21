@@ -56,6 +56,14 @@ async function createValkyriePackage(orgId) {
       }
     });
     
+    // Generate API keys for this organization
+    const { createApiKeysFile } = require('./generate-org-keys.js');
+    const { textContent: apiKeysContent, jsonConfig } = createApiKeysFile(orgId, orgId);
+    
+    // Write API keys files
+    fs.writeFileSync(path.join(packageDir, 'API_KEYS.txt'), apiKeysContent);
+    fs.writeFileSync(path.join(packageDir, 'valkyrie-config.json'), JSON.stringify(jsonConfig, null, 2));
+    
     // Create installation script
     const installScript = `#!/bin/bash
 
@@ -103,7 +111,14 @@ echo "🔐 Default Login:"
 echo "• Username: admin"
 echo "• Password: admin123"
 echo ""
+echo "🔑 API Keys:"
+echo "• Check API_KEYS.txt for your organization's API keys"
+echo "• Each team member gets their own unique API key"
+echo "• CEO key: Full system access"
+echo "• Developer keys: Project-specific access"
+echo ""
 echo "⚠️  Please change the default password after first login!"
+echo "⚠️  Keep your API keys secure and confidential!"
 echo ""
 echo "For support, contact your Odin administrator."
 `;
@@ -202,6 +217,17 @@ After installation, access your file manager at:
 - **Password:** admin123
 
 ⚠️ **Important:** Change the default password after first login!
+
+## 🔑 API Keys
+
+Your organization has been assigned unique API keys for secure access:
+
+- **CEO Key:** Full system access - can manage all projects and users
+- **Project Manager Key:** Project management access - can manage assigned projects  
+- **Developer Keys:** Development team access - can upload and manage files
+- **Intern Key:** Limited access - can view and download files only
+
+📋 **Check API_KEYS.txt for your specific API keys and usage examples.**
 
 ## 🏗️ Architecture
 
