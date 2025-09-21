@@ -9,14 +9,13 @@ from .routers.list import router as list_router
 
 import logging
 logger = logging.getLogger("uvicorn.error")
-
-# Try to import optional search router without failing the whole app
 try:
+	# Attempt to import optional search router; may raise if module missing or broken
 	from .routers import search as search_router
 except Exception as exc:
-	# If the module is missing or has an error, log and continue
+	# Log but do not fail the whole application
 	search_router = None
-	logger.warning("Search router not available: %s", exc, exc_info=True)
+	logger.warning("Optional search router not available: %s", exc, exc_info=True)
 
 app = FastAPI(title="Odin Valkyrie", version="0.1")
 
@@ -58,6 +57,6 @@ app.include_router(health.router)
 app.include_router(ingest_router)
 app.include_router(list_router)
 app.include_router(download_router)
-# Only register search router if import succeeded and it exposes `router`
+# Only include search router if it imported successfully and exposes `router`
 if search_router and hasattr(search_router, "router"):
 	app.include_router(search_router.router)
