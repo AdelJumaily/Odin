@@ -91,15 +91,8 @@ export default function Navbar() {
                     ))}
 
                     <div className="pt-4 pb-2 border-t border-white/10 w-full">
-                      <NavigationMenuLink
-                        href="/login"
-                        className="block w-30 py-3 px-2 text-white hover:text-white transition-all duration-300 hover:shadow-[0_0_20px_rgba(129,27,246,0.5)] hover:shadow-lg"
-                      >
-                        Login
-                      </NavigationMenuLink>
-
                       <Button asChild className="cta-button w-full mt-3" size="sm">
-                        <a href="/login">Get Started</a>
+                        <a href="/download">Download Valkyrie</a>
                       </Button>
                     </div>
                   </NavigationMenuList>
@@ -142,23 +135,14 @@ export default function Navbar() {
             </NavigationMenu>
           </div>
 
-          {/* Auth buttons - positioned absolute right */}
+          {/* Download button - positioned absolute right */}
           <div className="absolute right-8 flex items-center gap-1">
-            <Button
-              asChild
-              variant="ghost"
-              size="sm"
-              className="text-white w-25 h-10 hover:text-white bg-transparent hover:bg-white/5 transition-colors rounded-full px-4"
-            >
-              <a href="/login">Login</a>
-            </Button>
-
             <Button
               asChild
               size="sm"
               className="w-35 h-10 bg-gradient-to-r from-[#e01300] to-[#ff6940] border-0 text-white w-hover:from-[#e01300] hover:to-[#ff6940] px-8 py-3 rounded-full text-sm font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-[0_0_30px_rgba(129,27,246,0.6)] hover:shadow-lg"
             >
-              <a href="/signup" className="">Get Started</a>
+              <a href="/download" className="">Download Valkyrie</a>
             </Button>
           </div>
         </div>
