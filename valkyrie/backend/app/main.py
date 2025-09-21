@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from sqlalchemy import text
 from .db import engine
 from .models import Base
@@ -17,41 +18,66 @@ except Exception as exc:
 	search_router = None
 	logger.warning("Optional search router not available: %s", exc, exc_info=True)
 
+# Add SQLAlchemy exception imports
+from sqlalchemy.exc import ProgrammingError, SQLAlchemyError
+
 app = FastAPI(title="Odin Valkyrie", version="0.1")
+
+# Log full DB ProgrammingError traceback, return concise JSON to client
+@app.exception_handler(ProgrammingError)
+async def sqlalchemy_programming_error_handler(request: Request, exc: ProgrammingError):
+    logger.exception("Database ProgrammingError during %s %s", request.method, request.url, exc_info=exc)
+    return JSONResponse(status_code=500, content={"detail": "database error: ProgrammingError"})
+
+# Catch other SQLAlchemy errors as well
+@app.exception_handler(SQLAlchemyError)
+async def sqlalchemy_error_handler(request: Request, exc: SQLAlchemyError):
+    logger.exception("SQLAlchemyError during %s %s", request.method, request.url, exc_info=exc)
+    return JSONResponse(status_code=500, content={"detail": "database error: SQLAlchemyError"})
+
+# Add a global exception handler to ensure full tracebacks are logged
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.exception("Unhandled exception during %s %s", request.method, request.url, exc_info=exc)
+    return JSONResponse(status_code=500, content={"detail": "internal server error"})
 
 @app.on_event("startup")
 def startup():
-    Base.metadata.create_all(bind=engine)
+    try:
+        Base.metadata.create_all(bind=engine)
 
-    with engine.begin() as con:
-        # Users (api_key is UNIQUE)
-        con.execute(text("""
-            INSERT INTO users (name, api_key, role)
-            VALUES (:n, :k, :r)
-            ON CONFLICT (api_key) DO NOTHING
-        """), [{"n":"CEO","k":"ceo-key-123","r":"ceo"},
-               {"n":"Alice","k":"alice-key-123","r":"editor"},
-               {"n":"Intern","k":"intern-key-123","r":"intern"}])
+        with engine.begin() as con:
+            # Users (api_key is UNIQUE)
+            con.execute(text("""
+                INSERT INTO users (name, api_key, role)
+                VALUES (:n, :k, :r)
+                ON CONFLICT (api_key) DO NOTHING
+            """), [{"n":"CEO","k":"ceo-key-123","r":"ceo"},
+                   {"n":"Alice","k":"alice-key-123","r":"editor"},
+                   {"n":"Intern","k":"intern-key-123","r":"intern"}])
 
-        # Projects (name is UNIQUE)
-        con.execute(text("""
-            INSERT INTO projects (name)
-            VALUES (:n)
-            ON CONFLICT (name) DO NOTHING
-        """), [{"n":"Apollo"}, {"n":"Zephyr"}])
+            # Projects (name is UNIQUE)
+            con.execute(text("""
+                INSERT INTO projects (name)
+                VALUES (:n)
+                ON CONFLICT (name) DO NOTHING
+            """), [{"n":"Apollo"}, {"n":"Zephyr"}])
 
-        # Project membership (avoid dup with NOT EXISTS)
-        con.execute(text("""
-            INSERT INTO project_membership (user_id, project_id)
-            SELECT u.id, p.id
-            FROM users u, projects p
-            WHERE u.name = :uname AND p.name = :pname
-              AND NOT EXISTS (
-                SELECT 1 FROM project_membership pm
-                WHERE pm.user_id = u.id AND pm.project_id = p.id
-              )
-        """), [{"uname":"Alice","pname":"Apollo"},
-               {"uname":"Intern","pname":"Zephyr"}])
+            # Project membership (avoid dup with NOT EXISTS)
+            con.execute(text("""
+                INSERT INTO project_membership (user_id, project_id)
+                SELECT u.id, p.id
+                FROM users u, projects p
+                WHERE u.name = :uname AND p.name = :pname
+                  AND NOT EXISTS (
+                    SELECT 1 FROM project_membership pm
+                    WHERE pm.user_id = u.id AND pm.project_id = p.id
+                  )
+            """), [{"uname":"Alice","pname":"Apollo"},
+                   {"uname":"Intern","pname":"Zephyr"}])
+    except Exception as exc:
+        logger.exception("Exception during startup: %s", exc)
+        raise
 
 app.include_router(health.router)
 app.include_router(ingest_router)
