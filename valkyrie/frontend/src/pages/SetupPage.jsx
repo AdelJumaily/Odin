@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { ChevronDown, User, Building, Mail, Lock, Key, CheckCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { ChevronDown, User, Building, Lock, Key, CheckCircle } from 'lucide-react';
 
 const SetupPage = ({ onSetupComplete }) => {
-  const [currentStep, setCurrentStep] = 0;
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -12,24 +11,19 @@ const SetupPage = ({ onSetupComplete }) => {
     confirmPassword: ''
   });
   const [apiKeys, setApiKeys] = useState(null);
-  const [showKeys, setShowKeys] = useState(false);
 
   const steps = [
-    { id: 'welcome', title: 'Welcome to Valkyrie', icon: User },
-    { id: 'personal', title: 'Personal Information', icon: User },
-    { id: 'organization', title: 'Organization Details', icon: Building },
-    { id: 'security', title: 'Master Password', icon: Lock },
-    { id: 'keys', title: 'API Keys Generated', icon: Key },
-    { id: 'complete', title: 'Setup Complete', icon: CheckCircle }
+    { id: 'welcome', title: 'Welcome', icon: User },
+    { id: 'personal', title: 'Personal', icon: User },
+    { id: 'organization', title: 'Organization', icon: Building },
+    { id: 'security', title: 'Security', icon: Lock },
+    { id: 'keys', title: 'API Keys', icon: Key },
+    { id: 'complete', title: 'Complete', icon: CheckCircle }
   ];
 
   const handleContinue = () => {
     if (currentStep < steps.length - 1) {
-      setIsAnimating(true);
-      setTimeout(() => {
-        setCurrentStep(prev => prev + 1);
-        setIsAnimating(false);
-      }, 300);
+      setCurrentStep(prev => prev + 1);
     }
   };
 
@@ -56,25 +50,17 @@ const SetupPage = ({ onSetupComplete }) => {
       lastLogin: new Date().toISOString()
     };
     
-    // Save to localStorage
     localStorage.setItem('valkyrie_user_data', JSON.stringify(userData));
-    
-    // Call completion handler
     onSetupComplete(userData);
   };
 
   const validateStep = (step) => {
     switch (step) {
-      case 1: // Personal
-        return formData.name.trim() && formData.email.trim();
-      case 2: // Organization
-        return formData.organization.trim();
-      case 3: // Security
-        return formData.masterPassword.length >= 8 && formData.masterPassword === formData.confirmPassword;
-      case 4: // Keys
-        return apiKeys !== null;
-      default:
-        return true;
+      case 1: return formData.name.trim() && formData.email.trim();
+      case 2: return formData.organization.trim();
+      case 3: return formData.masterPassword.length >= 8 && formData.masterPassword === formData.confirmPassword;
+      case 4: return apiKeys !== null;
+      default: return true;
     }
   };
 
@@ -91,13 +77,6 @@ const SetupPage = ({ onSetupComplete }) => {
               <p className="text-lg text-gray-400 max-w-2xl mx-auto">
                 Welcome to the future of secure file management. Let's set up your account and generate your access keys.
               </p>
-            </div>
-            <div className="space-y-4">
-              <div className="flex justify-center space-x-4">
-                <div className="w-3 h-3 bg-[#a123f6] rounded-full animate-pulse"></div>
-                <div className="w-3 h-3 bg-blue-400 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                <div className="w-3 h-3 bg-purple-400 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
-              </div>
             </div>
           </div>
         );
@@ -251,13 +230,6 @@ const SetupPage = ({ onSetupComplete }) => {
                 Your Valkyrie account has been successfully configured. You can now access your secure file management system.
               </p>
             </div>
-            <div className="space-y-4">
-              <div className="flex justify-center space-x-4">
-                <div className="w-3 h-3 bg-[#a123f6] rounded-full animate-pulse"></div>
-                <div className="w-3 h-3 bg-blue-400 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                <div className="w-3 h-3 bg-purple-400 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
-              </div>
-            </div>
           </div>
         );
 
@@ -268,26 +240,9 @@ const SetupPage = ({ onSetupComplete }) => {
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
-      {/* Animated Background */}
+      {/* Simple Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-blue-900/20 to-indigo-900/20"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-transparent to-black/50"></div>
       
-      {/* Floating Particles */}
-      <div className="absolute inset-0">
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-[#a123f6] rounded-full animate-pulse"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 2}s`,
-              animationDuration: `${2 + Math.random() * 2}s`
-            }}
-          />
-        ))}
-      </div>
-
       {/* Main Content */}
       <div className="relative z-10 min-h-screen flex items-center justify-center p-8">
         <div className="w-full max-w-4xl">
@@ -326,7 +281,7 @@ const SetupPage = ({ onSetupComplete }) => {
           </div>
 
           {/* Step Content */}
-          <div className={`transition-all duration-300 ${isAnimating ? 'opacity-0 transform translate-y-8' : 'opacity-100 transform translate-y-0'}`}>
+          <div className="transition-all duration-300">
             {renderStepContent()}
           </div>
 
