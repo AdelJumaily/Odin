@@ -1,0 +1,64 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: valkyrie
+      POSTGRES_USER: valkyrie
+      POSTGRES_PASSWORD: valkyrie
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    # transient root to fix ownership if needed, then exec standard entrypoint
+    user: root
+    entrypoint: ["/bin/sh", "-c", "chown -R postgres:postgres /var/lib/postgresql/data || true; exec docker-entrypoint.sh postgres"]
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["uvicorn", "apps.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    env_file:
+      - ./.env
+    environment:
+      VALKYRIE_DATABASE_URL: postgresql+psycopg://valkyrie:valkyrie@postgres:5432/valkyrie
+      VALKYRIE_REDIS_URL: redis://redis:6379/0
+      VALKYRIE_NEO4J_URL: bolt://neo4j:7687
+      VALKYRIE_NEO4J_USER: neo4j
+      VALKYRIE_NEO4J_PASSWORD: neo4jpassword
+      VALKYRIE_STORAGE_PATH: /var/lib/valkyrie/uploads
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - uploads:/var/lib/valkyrie/uploads
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    env_file:
+      - ./.env
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  uploads:
