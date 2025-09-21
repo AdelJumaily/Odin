@@ -16,8 +16,29 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // DEVELOPMENT MODE - Skip authentication
+  const DEV_MODE = true;
+
   useEffect(() => {
     const initAuth = async () => {
+      if (DEV_MODE) {
+        // Development mode - auto-login with mock user
+        const mockUser = {
+          id: 1,
+          name: 'Developer',
+          role: 'ceo',
+          apiKey: 'dev-mode-key'
+        };
+        
+        apiService.setApiKey('dev-mode-key');
+        apiService.setCurrentUser(mockUser);
+        setUser(mockUser);
+        setIsAuthenticated(true);
+        setIsLoading(false);
+        return;
+      }
+
+      // Production mode - normal authentication
       const savedUser = apiService.getCurrentUser();
       const apiKey = localStorage.getItem('odin_api_key');
       

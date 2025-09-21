@@ -9,6 +9,13 @@ import LoadingSpinner from './components/LoadingSpinner';
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
   
+  // DEVELOPMENT MODE - Skip authentication
+  const DEV_MODE = true;
+  
+  if (DEV_MODE) {
+    return children; // Skip authentication in dev mode
+  }
+  
   if (isLoading) {
     return <LoadingSpinner />;
   }
