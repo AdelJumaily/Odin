@@ -14,7 +14,7 @@ export function WhatWeDo() {
           {/* LEFT: text (inherits the container padding) */}
           <div className="space-y-8">
             <div>
-              <h2 className="mb-6 text-4xl md:text-6xl font-extrabold leading-tight tracking-tight dark:text-white text-black">
+              <h2 className="mb-6 text-4xl md:text-6xl font-extrabold leading-tight tracking-tight dark:text-[#e01300] text-black">
                 Global{" "}
                 <span className="text-neutral-400">
                   {titleWords.map((w, i) => (
