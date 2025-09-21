@@ -1,20 +1,40 @@
+"""WebSocket event hub for realtime updates."""
+from __future__ import annotations
+
+import asyncio
+import json
+from typing import Any, Dict, Set
+
 from fastapi import WebSocket
 
 
 class EventHub:
-    def __init__(self):
-        self._clients = set()
+    def __init__(self) -> None:
+        self._clients: Set[WebSocket] = set()
+        self._lock = asyncio.Lock()
 
-    async def connect(self, ws: WebSocket):
+    async def connect(self, ws: WebSocket) -> None:
         await ws.accept()
-        self._clients.add(ws)
+        async with self._lock:
+            self._clients.add(ws)
 
-    def disconnect(self, ws: WebSocket):
-        self._clients.discard(ws)
+    async def disconnect(self, ws: WebSocket) -> None:
+        async with self._lock:
+            self._clients.discard(ws)
 
-    async def broadcast(self, message: str):
-        for ws in list(self._clients):
+    async def broadcast(self, payload: Dict[str, Any]) -> None:
+        data = json.dumps(payload)
+        async with self._lock:
+            clients = list(self._clients)
+        for ws in clients:
             try:
-                await ws.send_text(message)
+                await ws.send_text(data)
             except Exception:
-                self._clients.discard(ws)
+                await self.disconnect(ws)
+
+
+_event_hub = EventHub()
+
+
+def get_event_hub() -> EventHub:
+    return _event_hub
