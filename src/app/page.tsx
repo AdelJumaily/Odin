@@ -39,10 +39,10 @@ export default function Home() {
             {/* CTA Buttons */}
             <div className="relitive flex flex-col gap-5 sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 justify-center items-center">
               <a 
-                href="/signup"
+                href="/download"
                 className="w-56 h-14 bg-gradient-to-br from-[#e01300]/20 to-black rounded-full border-2 border-[#e01300] text-white text-base font-semibold hover:bg-[#e01300] transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-[#e01300]/25 flex items-center justify-center"
               >
-                Get Started
+                Download Valkyrie
               </a>
               <a 
                 href="#learn-more"
