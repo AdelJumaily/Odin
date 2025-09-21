@@ -24,6 +24,7 @@ import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import FileUpload from '../components/FileUpload';
 import ProfileModal from '../components/ProfileModal';
+import CreateFolderModal from '../components/CreateFolderModal';
 
 const FileExplorer = () => {
   const [files, setFiles] = useState([]);
@@ -33,6 +34,7 @@ const FileExplorer = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showUpload, setShowUpload] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [showCreateFolder, setShowCreateFolder] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
 
   // Load data from localStorage on component mount
@@ -79,23 +81,30 @@ const FileExplorer = () => {
     setShowUpload(false);
   };
 
-  const handleCreateFolder = () => {
-    const folderName = prompt('Enter folder name:');
-    if (folderName && folderName.trim()) {
-      const newFolder = {
-        id: Date.now(), // Use timestamp for unique ID
-        name: folderName.trim(),
-        itemCount: 0,
-        modified: new Date().toISOString().split('T')[0],
-        path: currentPath // Assign to current path
-      };
-      
-      const updatedFolders = [...folders, newFolder];
-      setFolders(updatedFolders);
-      
-      // Save to localStorage
-      localStorage.setItem('valkyrie-folders', JSON.stringify(updatedFolders));
+  const handleCreateFolder = async (folderName) => {
+    // Check if folder name already exists in current path
+    const existingFolder = folders.find(folder => 
+      folder.name.toLowerCase() === folderName.toLowerCase() && 
+      folder.path === currentPath
+    );
+    
+    if (existingFolder) {
+      throw new Error('A folder with this name already exists');
     }
+
+    const newFolder = {
+      id: Date.now(), // Use timestamp for unique ID
+      name: folderName.trim(),
+      itemCount: 0,
+      modified: new Date().toISOString().split('T')[0],
+      path: currentPath // Assign to current path
+    };
+    
+    const updatedFolders = [...folders, newFolder];
+    setFolders(updatedFolders);
+    
+    // Save to localStorage
+    localStorage.setItem('valkyrie-folders', JSON.stringify(updatedFolders));
   };
 
   const handleDelete = (id, type) => {
@@ -170,7 +179,7 @@ const FileExplorer = () => {
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
           onUpload={() => setShowUpload(true)}
-          onCreateFolder={handleCreateFolder}
+          onCreateFolder={() => setShowCreateFolder(true)}
           onProfile={() => setShowProfile(true)}
           viewMode={viewMode}
           onViewModeChange={setViewMode}
@@ -423,7 +432,7 @@ const FileExplorer = () => {
                     Upload Files
                   </button>
                   <button 
-                    onClick={handleCreateFolder}
+                    onClick={() => setShowCreateFolder(true)}
                     className="btn btn-secondary"
                   >
                     <FolderPlus className="w-4 h-4 mr-2" />
@@ -447,6 +456,14 @@ const FileExplorer = () => {
       {showProfile && (
         <ProfileModal 
           onClose={() => setShowProfile(false)}
+        />
+      )}
+
+      {showCreateFolder && (
+        <CreateFolderModal 
+          onClose={() => setShowCreateFolder(false)}
+          onCreateFolder={handleCreateFolder}
+          currentPath={currentPath}
         />
       )}
     </div>

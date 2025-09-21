@@ -43,7 +43,8 @@ def create_app() -> FastAPI:
     app.include_router(search.router)
     app.include_router(admin.router)
     # Legacy frontend compatibility endpoints mounted at /api
-    from .routers import compat as compat_router
+    # Import the APIRouter object from the compat module and mount it at /api
+    from .routers.compat import router as compat_router
 
     app.include_router(compat_router, prefix="/api")
 

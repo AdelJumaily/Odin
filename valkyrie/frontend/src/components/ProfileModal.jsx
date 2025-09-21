@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { X, User, Mail, Building, Shield, Settings, LogOut, Camera, HardDrive } from 'lucide-react';
+import { X, User, Mail, Building, Shield, Settings, LogOut, Camera, HardDrive, AlertCircle, CheckCircle } from 'lucide-react';
 import { calculateStorageUsage, getStorageStatus } from '../utils/storage';
 
 const ProfileModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState('profile');
   const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [profile, setProfile] = useState({
     name: 'John Doe',
     email: 'john.doe@company.com',
@@ -18,19 +19,98 @@ const ProfileModal = ({ onClose }) => {
     percentage: 0,
     status: 'excellent'
   });
+  const [notifications, setNotifications] = useState({
+    email: true,
+    fileUpload: true,
+    securityAlerts: false
+  });
+  const [passwordForm, setPasswordForm] = useState({
+    current: '',
+    new: '',
+    confirm: ''
+  });
+  const [passwordError, setPasswordError] = useState('');
+  const [passwordSuccess, setPasswordSuccess] = useState(false);
+  const [saveMessage, setSaveMessage] = useState('');
 
-  const handleSave = () => {
-    // Save profile logic here
-    setIsEditing(false);
+  const handleSave = async () => {
+    setIsSaving(true);
+    setSaveMessage('');
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Save to localStorage
+      localStorage.setItem('valkyrie-profile', JSON.stringify(profile));
+      localStorage.setItem('valkyrie-notifications', JSON.stringify(notifications));
+      
+      setSaveMessage('Profile updated successfully!');
+      setIsEditing(false);
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => setSaveMessage(''), 3000);
+    } catch (error) {
+      setSaveMessage('Failed to save profile. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+    setPasswordError('');
+    setPasswordSuccess(false);
+
+    if (passwordForm.new !== passwordForm.confirm) {
+      setPasswordError('New passwords do not match');
+      return;
+    }
+
+    if (passwordForm.new.length < 8) {
+      setPasswordError('Password must be at least 8 characters long');
+      return;
+    }
+
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      setPasswordSuccess(true);
+      setPasswordForm({ current: '', new: '', confirm: '' });
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => setPasswordSuccess(false), 3000);
+    } catch (error) {
+      setPasswordError('Failed to update password. Please try again.');
+    }
   };
 
   const handleLogout = () => {
-    // Logout logic here
+    // Clear localStorage
+    localStorage.removeItem('valkyrie-profile');
+    localStorage.removeItem('valkyrie-notifications');
+    localStorage.removeItem('valkyrie-files');
+    localStorage.removeItem('valkyrie-folders');
+    
     onClose();
   };
 
-  // Calculate storage usage
+  // Load saved data and calculate storage usage
   useEffect(() => {
+    // Load profile data
+    const savedProfile = localStorage.getItem('valkyrie-profile');
+    if (savedProfile) {
+      setProfile(JSON.parse(savedProfile));
+    }
+
+    // Load notification settings
+    const savedNotifications = localStorage.getItem('valkyrie-notifications');
+    if (savedNotifications) {
+      setNotifications(JSON.parse(savedNotifications));
+    }
+
+    // Calculate storage usage
     const savedFiles = localStorage.getItem('valkyrie-files');
     if (savedFiles) {
       const files = JSON.parse(savedFiles);
@@ -94,10 +174,26 @@ const ProfileModal = ({ onClose }) => {
                   <button
                     onClick={() => setIsEditing(!isEditing)}
                     className="btn btn-primary"
+                    disabled={isSaving}
                   >
                     {isEditing ? 'Cancel' : 'Edit Profile'}
                   </button>
                 </div>
+
+                {saveMessage && (
+                  <div className={`mb-4 p-3 rounded-lg flex items-center space-x-2 ${
+                    saveMessage.includes('successfully') 
+                      ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
+                      : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                  }`}>
+                    {saveMessage.includes('successfully') ? (
+                      <CheckCircle className="w-4 h-4" />
+                    ) : (
+                      <AlertCircle className="w-4 h-4" />
+                    )}
+                    <span className="text-sm">{saveMessage}</span>
+                  </div>
+                )}
 
                 <div className="space-y-6">
                   {/* Avatar */}
@@ -170,14 +266,23 @@ const ProfileModal = ({ onClose }) => {
                       <button
                         onClick={() => setIsEditing(false)}
                         className="btn btn-secondary"
+                        disabled={isSaving}
                       >
                         Cancel
                       </button>
                       <button
                         onClick={handleSave}
-                        className="btn btn-primary"
+                        className="btn btn-primary flex items-center space-x-2"
+                        disabled={isSaving}
                       >
-                        Save Changes
+                        {isSaving ? (
+                          <>
+                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            <span>Saving...</span>
+                          </>
+                        ) : (
+                          <span>Save Changes</span>
+                        )}
                       </button>
                     </div>
                   )}
@@ -225,21 +330,58 @@ const ProfileModal = ({ onClose }) => {
                 <div className="space-y-6">
                   <div className="profile-glass-card p-6 rounded-xl profile-hazy-glow">
                     <h4 className="text-lg font-semibold text-gray-200 mb-4">Change Password</h4>
-                    <div className="space-y-4">
+                    
+                    {passwordSuccess && (
+                      <div className="mb-4 p-3 rounded-lg bg-green-500/20 text-green-400 border border-green-500/30 flex items-center space-x-2">
+                        <CheckCircle className="w-4 h-4" />
+                        <span className="text-sm">Password updated successfully!</span>
+                      </div>
+                    )}
+
+                    <form onSubmit={handlePasswordChange} className="space-y-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-300 mb-2">Current Password</label>
-                        <input type="password" className="input" />
+                        <input 
+                          type="password" 
+                          className="input" 
+                          value={passwordForm.current}
+                          onChange={(e) => setPasswordForm({...passwordForm, current: e.target.value})}
+                          required
+                        />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-300 mb-2">New Password</label>
-                        <input type="password" className="input" />
+                        <input 
+                          type="password" 
+                          className="input" 
+                          value={passwordForm.new}
+                          onChange={(e) => setPasswordForm({...passwordForm, new: e.target.value})}
+                          required
+                          minLength={8}
+                        />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-300 mb-2">Confirm New Password</label>
-                        <input type="password" className="input" />
+                        <input 
+                          type="password" 
+                          className="input" 
+                          value={passwordForm.confirm}
+                          onChange={(e) => setPasswordForm({...passwordForm, confirm: e.target.value})}
+                          required
+                        />
                       </div>
-                      <button className="btn btn-primary">Update Password</button>
-                    </div>
+                      
+                      {passwordError && (
+                        <div className="flex items-center space-x-2 text-red-400 text-sm">
+                          <AlertCircle className="w-4 h-4" />
+                          <span>{passwordError}</span>
+                        </div>
+                      )}
+
+                      <button type="submit" className="btn btn-primary">
+                        Update Password
+                      </button>
+                    </form>
                   </div>
 
                   <div className="profile-glass-card p-6 rounded-xl profile-hazy-glow">
@@ -258,30 +400,72 @@ const ProfileModal = ({ onClose }) => {
                   <div className="profile-glass-card p-6 rounded-xl profile-hazy-glow">
                     <h4 className="text-lg font-semibold text-gray-200 mb-4">Notifications</h4>
                     <div className="space-y-4">
-                      <label className="flex items-center space-x-3">
-                        <input type="checkbox" className="rounded" defaultChecked />
+                      <label className="flex items-center space-x-3 cursor-pointer">
+                        <input 
+                          type="checkbox" 
+                          className="rounded w-4 h-4 text-red-primary bg-gray-700 border-gray-600 focus:ring-red-primary focus:ring-2" 
+                          checked={notifications.email}
+                          onChange={(e) => setNotifications({...notifications, email: e.target.checked})}
+                        />
                         <span className="text-gray-300">Email notifications</span>
                       </label>
-                      <label className="flex items-center space-x-3">
-                        <input type="checkbox" className="rounded" defaultChecked />
+                      <label className="flex items-center space-x-3 cursor-pointer">
+                        <input 
+                          type="checkbox" 
+                          className="rounded w-4 h-4 text-red-primary bg-gray-700 border-gray-600 focus:ring-red-primary focus:ring-2" 
+                          checked={notifications.fileUpload}
+                          onChange={(e) => setNotifications({...notifications, fileUpload: e.target.checked})}
+                        />
                         <span className="text-gray-300">File upload notifications</span>
                       </label>
-                      <label className="flex items-center space-x-3">
-                        <input type="checkbox" className="rounded" />
+                      <label className="flex items-center space-x-3 cursor-pointer">
+                        <input 
+                          type="checkbox" 
+                          className="rounded w-4 h-4 text-red-primary bg-gray-700 border-gray-600 focus:ring-red-primary focus:ring-2" 
+                          checked={notifications.securityAlerts}
+                          onChange={(e) => setNotifications({...notifications, securityAlerts: e.target.checked})}
+                        />
                         <span className="text-gray-300">Security alerts</span>
                       </label>
                     </div>
+                    <button 
+                      onClick={() => {
+                        localStorage.setItem('valkyrie-notifications', JSON.stringify(notifications));
+                        setSaveMessage('Notification settings saved!');
+                        setTimeout(() => setSaveMessage(''), 3000);
+                      }}
+                      className="mt-4 btn btn-primary"
+                    >
+                      Save Notification Settings
+                    </button>
                   </div>
 
                   <div className="profile-glass-card p-6 rounded-xl profile-hazy-glow">
                     <h4 className="text-lg font-semibold text-gray-200 mb-4">Storage</h4>
                     <div className="mb-4">
                       <div className="flex justify-between text-sm text-gray-400 mb-2">
-                        <span>Used: 2.3 GB</span>
-                        <span>Total: 10 GB</span>
+                        <span>Used: {storageInfo.used}</span>
+                        <span>Total: {storageInfo.total}</span>
                       </div>
                       <div className="w-full bg-gray-700 rounded-full h-2">
-                        <div className="bg-red-primary h-2 rounded-full" style={{ width: '23%' }}></div>
+                        <div 
+                          className={`h-2 rounded-full transition-all duration-300 ${
+                            storageInfo.status === 'critical' ? 'bg-red-500' :
+                            storageInfo.status === 'warning' ? 'bg-yellow-500' :
+                            storageInfo.status === 'good' ? 'bg-blue-500' : 'bg-green-500'
+                          }`}
+                          style={{ width: `${Math.min(storageInfo.percentage, 100)}%` }}
+                        ></div>
+                      </div>
+                      <div className="flex justify-between text-xs mt-2">
+                        <span className={`${
+                          storageInfo.status === 'critical' ? 'text-red-400' :
+                          storageInfo.status === 'warning' ? 'text-yellow-400' :
+                          storageInfo.status === 'good' ? 'text-blue-400' : 'text-green-400'
+                        }`}>
+                          {storageInfo.status.charAt(0).toUpperCase() + storageInfo.status.slice(1)}
+                        </span>
+                        <span className="text-gray-500">{storageInfo.percentage.toFixed(1)}% used</span>
                       </div>
                     </div>
                     <button className="btn btn-secondary">Upgrade Storage</button>

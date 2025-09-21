@@ -517,6 +517,75 @@
     }
   }
 
+  @keyframes worm-slither {
+    0% {
+      transform: translateX(-100px) rotate(0deg);
+    }
+    25% {
+      transform: translateX(0px) rotate(5deg);
+    }
+    50% {
+      transform: translateX(100px) rotate(0deg);
+    }
+    75% {
+      transform: translateX(200px) rotate(-5deg);
+    }
+    100% {
+      transform: translateX(300px) rotate(0deg);
+    }
+  }
+
+  @keyframes worm-segment {
+    0% {
+      transform: scale(1) rotate(0deg);
+    }
+    25% {
+      transform: scale(1.1) rotate(2deg);
+    }
+    50% {
+      transform: scale(0.9) rotate(0deg);
+    }
+    75% {
+      transform: scale(1.05) rotate(-2deg);
+    }
+    100% {
+      transform: scale(1) rotate(0deg);
+    }
+  }
+
+  .worm-container {
+    position: relative;
+    width: 400px;
+    height: 100px;
+    overflow: hidden;
+  }
+
+  .worm {
+    position: absolute;
+    top: 50%;
+    left: -100px;
+    transform: translateY(-50%);
+    animation: worm-slither 4s ease-in-out infinite;
+  }
+
+  .worm-segment {
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(45deg, #a123f6, #3b82f6, #8b5cf6);
+    border-radius: 50%;
+    position: absolute;
+    animation: worm-segment 0.8s ease-in-out infinite;
+  }
+
+  .worm-segment:nth-child(1) { left: 0px; animation-delay: 0s; }
+  .worm-segment:nth-child(2) { left: 15px; animation-delay: 0.1s; }
+  .worm-segment:nth-child(3) { left: 30px; animation-delay: 0.2s; }
+  .worm-segment:nth-child(4) { left: 45px; animation-delay: 0.3s; }
+  .worm-segment:nth-child(5) { left: 60px; animation-delay: 0.4s; }
+  .worm-segment:nth-child(6) { left: 75px; animation-delay: 0.5s; }
+  .worm-segment:nth-child(7) { left: 90px; animation-delay: 0.6s; }
+  .worm-segment:nth-child(8) { left: 105px; animation-delay: 0.7s; }
+
   .rainbow-trace-svg {
     position: absolute;
     top: 0;
@@ -631,6 +700,27 @@
       inset 0 -1px 0 rgba(255, 255, 255, 0.15),
       0 0 15px rgba(255, 255, 255, 0.08);
     transform: translateY(-2px);
+  }
+  
+  /* Profile Modal Styles */
+  .profile-modal-content {
+    @apply bg-black/80 backdrop-filter backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl relative;
+  }
+  
+  .profile-glass-panel {
+    @apply bg-white/5 backdrop-filter backdrop-blur-xl border border-white/10;
+  }
+  
+  .profile-glass-card {
+    @apply bg-white/5 backdrop-filter backdrop-blur-xl border border-white/10 rounded-xl;
+  }
+  
+  .profile-tab-content {
+    @apply space-y-6;
+  }
+  
+  .profile-hazy-glow {
+    @apply hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300;
   }
   
 }

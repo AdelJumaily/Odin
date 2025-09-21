@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   postgres:
-    image: postgres:15-alpine
+    image: postgres:15
     environment:
       POSTGRES_DB: valkyrie
       POSTGRES_USER: valkyrie
@@ -15,6 +15,17 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  db-init:
+    image: postgres:15
+    depends_on:
+      postgres:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["until pg_isready -h postgres -U valkyrie; do sleep 1; done; psql -h postgres -U valkyrie -d valkyrie -c \"CREATE EXTENSION IF NOT EXISTS vector;\"; sleep 1"]
+    environment:
+      PGPASSWORD: valkyrie
+    restart: 'no'
 
   redis:
     image: redis:7-alpine
@@ -43,7 +54,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: ["uvicorn", "apps.api.main:app", "--host", "0.0.0.0", "--port", "6789"]
+    command: ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "6789"]
     env_file:
       - ./.env
     environment:
@@ -54,10 +65,8 @@ services:
       VALKYRIE_NEO4J_PASSWORD: neo4jpassword
       VALKYRIE_STORAGE_PATH: /var/lib/valkyrie/uploads
     depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_started
+      - db-init
+      - redis
     volumes:
       - uploads:/var/lib/valkyrie/uploads
     ports:
