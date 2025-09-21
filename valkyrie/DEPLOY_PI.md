@@ -22,51 +22,87 @@ Quick start (recommended for evaluation)
 1. SSH into the Pi and install Docker + Tailscale.
 2. Configure Tailscale and set the hostname:
    ```bash
-   # On the Pi (Linux shell):
-   sudo tailscale up --hostname=valkyrie
-   ```
-   After this, your Pi will be discoverable via your tailnet's MagicDNS (for example `valkyrie.<your-tailnet>.beta.tailscale.net`).
+  # Deploying Valkyrie when only the `valkyrie/` folder will be on the server
 
-3. Clone the repo on the Pi and copy example env:
-   ```bash
-   git clone <repo-url> valkyrie
-   cd valkyrie
-   cp configs/.env.example .env
-   # Edit .env to set DATABASE_URL, REDIS_URL, etc. (or keep defaults for quick prototype)
-   ```
+  This document describes how to deploy Valkyrie when you will only copy the `valkyrie/` folder to a Linux server (Raspberry Pi or similar). All paths and commands below assume you are operating from inside that single `valkyrie/` directory on the server.
 
-4. Start the lightweight prototype (no external DB dependencies). This runs the compatibility router used by the current frontend:
-   ```bash
-   # optional: use a venv
-   python -m venv .venv; source .venv/bin/activate
-   pip install fastapi uvicorn
-   uvicorn apps.api.simple_app:app --host 0.0.0.0 --port 6789 --workers 1
-   ```
-   - Visit `http://<pi-tailscale-ip>:6789/api/health` to confirm.
-   - Run the frontend locally (or build and serve with Caddy) and point it to `http://<pi-tailscale-ip>:6789` via the Vite `VITE_API_URL` env.
+  Goals
+  - Make the repository self-contained so you can transfer only `valkyrie/` to a server and run the stack from that folder.
+  - Provide a simple installer (`valkyrie/install.sh`) and systemd unit templates (`valkyrie/systemd/`) that reference the local folder.
 
-Production-ish stack with Docker Compose (recommended)
-- Use the provided `docker-compose.pi.yml` (sample in this repo) as an override to the base `docker-compose.yml`. It uses arm64-friendly image tags where possible.
+  Prerequisites on the server
+  - Linux (Debian/Ubuntu/Raspbian recommended)
+  - Docker Engine installed and running
+  - Docker Compose (v2 via `docker compose` or legacy `docker-compose`)
 
-Sample Docker Compose run:
-```bash
-# from repo root (valkyrie)
-docker compose -f docker-compose.yml -f docker-compose.pi.yml up -d --build
-```
+  Copying the folder to the server
+  1. From your workstation, copy the `valkyrie/` folder to the server home directory. Example using `scp`:
 
-Notes and caveats
-- Neo4j: official Neo4j images historically had limited arm64 support. If Neo4j won't run on your Pi, use Redis-backed graph fallback included in the codebase or consider Memgraph which has arm64 builds.
-- Caddy and TLS: the repo includes a `configs/Caddyfile`. With Tailscale you can either:
-  - Use MagicDNS and serve the Pi's tailnet hostname (e.g., `valkyrie.<tailnet>`) from Caddy; or
-  - Use Tailscale’s `tailscale serve` and/or its HTTPS features (see Tailscale docs). For simplicity, using Caddy + a domain you control is recommended.
-- Backups: Postgres on a Pi may be slower — consider backing up volumes and keeping DBs small for testing.
-- Performance: Raspberry Pi (especially older models) is resource constrained — tune worker counts, Postgres memory settings, and chunk sizes.
+  ```bash
+  scp -r valkyrie user@raspi:/home/user/
+  ```
 
-Troubleshooting
-- If a service fails to start due to image/platform mismatch, try adding `platform: linux/arm64` to the service in the compose file or switch to an image that supports arm64.
-- If the frontend cannot reach the API, confirm Tailscale connectivity and the API URL (use the Pi's tailnet hostname or Tailscale IP in the frontend Vite env).
+  2. SSH into the server and change to the `valkyrie/` folder:
 
-Recommended immediate actions before deploying
-1. Decide whether you need Neo4j on the Pi; if yes, verify an arm64 image or plan to host Neo4j elsewhere.
-2. Update `configs/.env.example` with production sensible defaults and copy to `.env` on the Pi.
-3. Build a minimal `docker-compose.pi.yml` to pin arm64-friendly images and set resource limits.
+  ```bash
+  ssh user@raspi
+  cd ~/valkyrie
+  ```
+
+  Installer (single-folder)
+  - A self-contained installer is provided at `valkyrie/install.sh`. It must be executed while your current working directory is the `valkyrie/` folder. It will:
+    - Verify `docker` and `docker compose` (or `docker-compose`) are available and that the Docker daemon is running.
+    - Copy `env.docker` to `.env` if `.env` is missing.
+    - Create expected volume folders: `data`, `database/local`, and `valkyrie_data`.
+  - Launch Docker Compose using the local compose file `docker-compose.yml` in the current directory (or `configs/docker-compose.yml` if you keep compose files in `configs/`).
+
+  Run the installer (on the server):
+
+  ```bash
+  cd ~/valkyrie
+  chmod +x ./install.sh
+  ./install.sh
+  ```
+
+  PowerShell/Windows note
+  - If you must run from PowerShell (e.g., on a Windows server with WSL), use `valkyrie/install.ps1`. It will prefer to call `install.sh` inside WSL if available; otherwise it runs compose from PowerShell.
+
+  Systemd templates (single-folder friendly)
+  - Two example units are included in `valkyrie/systemd/`:
+    - `valkyrie-api.service` — starts/stops the whole compose stack (copy to `/etc/systemd/system/valkyrie-api.service`)
+    - `valkyrie-worker.service` — manages just the worker container (copy to `/etc/systemd/system/valkyrie-worker.service`)
+
+  Install and enable the API service (example):
+
+  ```bash
+  # on the server, from your home folder (assuming valkyrie is at ~/valkyrie)
+  sudo cp ~/valkyrie/systemd/valkyrie-api.service /etc/systemd/system/valkyrie-api.service
+  sudo systemctl daemon-reload
+  sudo systemctl enable --now valkyrie-api.service
+
+  # Optional: enable the worker unit
+  sudo cp ~/valkyrie/systemd/valkyrie-worker.service /etc/systemd/system/valkyrie-worker.service
+  sudo systemctl enable --now valkyrie-worker.service
+  ```
+
+  Notes and troubleshooting
+  - If the compose command fails because of image platform mismatch, add `platform: linux/arm64` in your `docker-compose.yml` or switch to arm64-compatible images.
+  - Check container status and logs with:
+
+  ```bash
+  docker compose ps
+  docker compose logs -f
+  ```
+
+  - If the server is memory constrained, consider disabling non-critical services or using lighter images in `docker-compose.yml`.
+
+  Networking and hostname
+  - If you want `valkyrie.local` or another friendly name to resolve to the server, update your DNS or `/etc/hosts` on client machines, or use a Tailscale hostname (recommended for simple remote access without public DNS).
+
+  Next steps (optional)
+  - Convert the prototype storage to SQLite to avoid running Postgres on the Pi.
+  - Harden secrets and move sensitive environment variables to a secrets store or the host environment.
+
+  If you want, I can now:
+  - Make `docker-compose.yml` smaller (disable Caddy or Postgres) for a minimal Pi-friendly demo, or
+  - Implement an automatic SQLite migration that runs after containers start.

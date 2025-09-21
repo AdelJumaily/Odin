@@ -2,7 +2,7 @@ fastapi
 uvicorn[standard]
 sqlmodel
 sqlalchemy
-psycopg2-binary
+psycopg
 pgvector
 redis
 rq
