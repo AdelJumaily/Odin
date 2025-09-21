@@ -15,12 +15,12 @@ valkyrie.local {
 
   # Proxy API requests to the backend (change port if your API listens on a different port)
   handle_path /api/* {
-    reverse_proxy localhost:6789
+    reverse_proxy localhost:8000
   }
 
   # Proxy websocket connections (ingest progress, events)
   handle_path /ws/* {
-    reverse_proxy localhost:6789
+    reverse_proxy localhost:8000
   }
 
   # Basic security headers

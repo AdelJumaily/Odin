@@ -17,7 +17,7 @@ trap cleanup SIGINT SIGTERM
 echo "📡 Starting backend server..."
 cd backend
 export DATABASE_URL="sqlite:///./dev_valkyrie.db"
-python3 -m uvicorn app.main:app --host 0.0.0.0 --port 6789 --reload &
+python3 -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload &
 BACKEND_PID=$!
 
 # Wait a moment for backend to start
@@ -31,9 +31,9 @@ FRONTEND_PID=$!
 
 echo ""
 echo "✅ Development servers started!"
-echo "📍 Backend API: http://localhost:6789"
+echo "📍 Backend API: http://localhost:8000"
 echo "📍 Frontend UI: http://localhost:3000 (or 3001)"
-echo "📍 API Docs: http://localhost:6789/docs"
+echo "📍 API Docs: http://localhost:8000/docs"
 echo ""
 echo "🔓 Development Mode: Authentication disabled"
 echo "💡 You can now edit the frontend freely!"

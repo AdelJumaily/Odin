@@ -4,9 +4,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: ["uvicorn", "apps.api.simple_app:app", "--host", "0.0.0.0", "--port", "6789"]
+    command: ["uvicorn", "apps.api.simple_app:app", "--host", "0.0.0.0", "--port", "8000"]
     ports:
-      - "${API_HOST_PORT:-6789}:6789"
+      - "${API_HOST_PORT:-8000}:8000"
     volumes:
       - ./data:/app/data
     environment:

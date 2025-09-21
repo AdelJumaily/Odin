@@ -8,4 +8,4 @@ COPY . .
 RUN poetry install --no-root
 
 FROM base AS api
-CMD ["uvicorn", "apps.api.main:app", "--host", "0.0.0.0", "--port", "6789"]
+CMD ["uvicorn", "apps.api.main:app", "--host", "0.0.0.0", "--port", "8000"]

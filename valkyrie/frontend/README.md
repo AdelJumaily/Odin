@@ -28,7 +28,7 @@ A modern React-based file management interface for the Odin Valkyrie backend sys
 
 - Node.js 16+ 
 - npm or yarn
-- Odin Valkyrie backend running on port 6789
+- Odin Valkyrie backend running on port 8000
 
 ### Installation
 

@@ -32,7 +32,7 @@ poetry run alembic upgrade head
 # start infrastructure
 docker compose up -d postgres redis neo4j
 # start api and worker
-poetry run uvicorn apps.api.main:app --host 0.0.0.0 --port 6789
+poetry run uvicorn apps.api.main:app --host 0.0.0.0 --port 8000
 poetry run python -m rq worker -c apps.worker.worker
 ```
 
@@ -61,7 +61,7 @@ NEO4J_HTTP_HOST_PORT=7474
 NEO4J_BOLT_HOST_PORT=7687
 MAILPIT_HTTP_HOST_PORT=8025
 MAILPIT_SMTP_HOST_PORT=1025
-API_HOST_PORT=6789
+API_HOST_PORT=8000
 FRONTEND_HOST_PORT=3000
 HTTP_HOST_PORT=80
 HTTPS_HOST_PORT=443
@@ -127,7 +127,7 @@ cd 'c:\Users\myles\OneDrive\Desktop\Odin\valkyrie'
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
- uvicorn apps.api.simple_app:app --reload --port 6789
+ uvicorn apps.api.simple_app:app --reload --port 8000
 ```
 
 Then open the frontend (Vite) dev server or build the frontend and point Caddy to the built assets.

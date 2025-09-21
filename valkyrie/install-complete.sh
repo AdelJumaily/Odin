@@ -118,7 +118,7 @@ docker compose up -d --build
 # Wait for backend to be healthy
 echo "⏳ Waiting for backend to be ready..."
 for i in {1..60}; do
-    if curl -sf http://localhost:6789/health >/dev/null 2>&1; then
+    if curl -sf http://localhost:8000/health >/dev/null 2>&1; then
         echo "✅ Backend is healthy"
         break
     fi
@@ -150,9 +150,9 @@ echo "🎉 Installation Complete!"
 echo "========================"
 echo ""
 echo "📊 Services Status:"
-echo "   Backend API:    http://localhost:6789"
+echo "   Backend API:    http://localhost:8000"
 echo "   Frontend UI:    http://localhost:3000"
-echo "   Health Check:   curl http://localhost:6789/health"
+echo "   Health Check:   curl http://localhost:8000/health"
 echo ""
 echo "🔑 Sample API Keys:"
 echo "   CEO:     ceo-key-123"

@@ -51,7 +51,7 @@ chmod +x ./install.sh
 ### 3. Access the Application
 
 - **Frontend**: http://your-server:3000
-- **API**: http://your-server:6789
+- **API**: http://your-server:8000
 - **Neo4j Browser**: http://your-server:7474
 - **Mailpit**: http://your-server:8025
 
@@ -78,7 +78,7 @@ nano .env
 
 Default ports (change in `.env` if needed):
 - **Frontend**: 3000
-- **API**: 6789
+- **API**: 8000
 - **PostgreSQL**: 5432
 - **Redis**: 6379
 - **Neo4j**: 7474 (HTTP), 7687 (Bolt)
@@ -130,7 +130,7 @@ The included Caddyfile provides automatic HTTPS. Update `configs/Caddyfile`:
 ```caddyfile
 your-domain.com {
     reverse_proxy frontend:80
-    reverse_proxy /api/* api:6789
+    reverse_proxy /api/* api:8000
 }
 ```
 
