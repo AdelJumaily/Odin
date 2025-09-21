@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { LinearGradient } from 'react-text-gradients';
 
 function DownloadContent() {
   const searchParams = useSearchParams();
@@ -61,16 +62,18 @@ function DownloadContent() {
 
   return (
     <div className="min-h-screen text-white overflow-x-hidden flex items-center justify-center" style={{
-      background: 'linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%)'
+      background: 'linear-gradient(135deg, #a123f6 0%, #1a1a2e 25%, #5116f6 100%)'
     }}>
-      <div className="max-w-5xl mx-auto px-8 py-8 w-full">
+      <div className="max-w-5xl mx-auto mt-10 w-full">
         {/* Header */}
         <div className="text-center mb-12 header-animation">
-          <div className="inline-flex items-center gap-4 text-5xl font-bold logo-gradient">
-            <span className="text-4xl logo-float">🗂️</span>
-            Odin File Manager
+          <div className="relitive text-6xl font-extrabold pb-3">
+            <LinearGradient gradient={['to right', '#a123f6 ,#5116f6']} fallbackColor="#a123f6">Valkyrie </LinearGradient>
+             File Manager
           </div>
-          <div className="mt-2 text-xl opacity-80 subtitle-fade">
+          <img src="/valyrielogo.png" alt="Valkyrie Logo" className="absolute ml-20 pt-2 h-30 w-45 opacity-25"/>
+          <img src="/valyrielogo.png" alt="Valkyrie Logo" className="absolute ml-20 h-30 w-45 opacity-75 "/>
+          <div className="relitive mt-5 text-xl opacity-80 subtitle-fade font-bold">
             Your secure, encrypted file management system
           </div>
         </div>
@@ -80,8 +83,7 @@ function DownloadContent() {
           <div className="card-shimmer"></div>
           
           <div className="flex items-center gap-4 mb-6 text-2xl font-semibold">
-            <span className="text-3xl icon-pulse">⬇️</span>
-            Choose Your Platform
+            Choose Your Platform:
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -109,7 +111,7 @@ function DownloadContent() {
                     link.click();
                     document.body.removeChild(link);
                   }}
-                  className="w-full bg-gradient-to-r from-[#00d4ff] to-[#5865f2] text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                  className="w-full bg-gradient-to-r from-[#a123f6] to-[#5116f6] text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105"
                 >
                   Download Now
                 </button>
@@ -139,7 +141,7 @@ function DownloadContent() {
                   Coming Soon
                 </button>
                 <div className="mt-2 text-xs opacity-60">
-                  🚧 In development
+                  In development
                 </div>
               </div>
             </div>
@@ -164,7 +166,7 @@ function DownloadContent() {
                   Coming Soon
                 </button>
                 <div className="mt-2 text-xs opacity-60">
-                  🚧 In development
+                  In development
                 </div>
               </div>
             </div>
@@ -192,7 +194,6 @@ function DownloadContent() {
           <div className="card-shimmer"></div>
           
           <div className="flex items-center gap-4 mb-6 text-2xl font-semibold">
-            <span className="text-3xl icon-pulse icon-delay-1">⚙️</span>
             Installation Instructions
           </div>
           
@@ -205,10 +206,10 @@ function DownloadContent() {
             ].map((step, index) => (
               <li 
                 key={index}
-                className="pl-12 relative transition-all duration-300 hover:translate-x-2 hover:text-[#00d4ff] step-item"
+                className="pl-12 relative transition-all duration-300 hover:translate-x-2 hover:text-[#a123f6] step-item"
               >
                 <div 
-                  className="absolute left-0 top-0 w-8 h-8 bg-gradient-to-br from-[#00d4ff] to-[#5865f2] rounded-full flex items-center justify-center font-bold text-sm step-number"
+                  className="absolute left-0 top-0 w-8 h-8 bg-gradient-to-br from-[#a123f6] to-[#5116f6] rounded-full flex items-center justify-center font-bold text-sm step-number"
                   style={{ animationDelay: `${(index + 1) * 0.2}s` }}
                 >
                   {index + 1}
@@ -224,7 +225,6 @@ function DownloadContent() {
           <div className="card-shimmer"></div>
           
           <div className="flex items-center gap-4 mb-6 text-2xl font-semibold">
-            <span className="text-3xl icon-pulse icon-delay-2">✨</span>
             File Management Features
           </div>
           
@@ -244,7 +244,7 @@ function DownloadContent() {
                 <div className="feature-glow"></div>
                 
                 <div className="flex items-center gap-3 mb-3 font-semibold relative z-10">
-                  <span className="text-[#00d4ff] text-xl">{feature.icon}</span>
+                  <span className="text-[#00ff00] text-xl">{feature.icon}</span>
                   {feature.title}
                 </div>
                 <div className="text-sm opacity-80 leading-relaxed relative z-10">
@@ -260,8 +260,7 @@ function DownloadContent() {
           <div className="card-shimmer"></div>
           
           <div className="flex items-center gap-4 mb-6 text-2xl font-semibold">
-            <span className="text-3xl icon-pulse icon-delay-3">🛡️</span>
-            Security Notice
+            Security Notes
           </div>
           
           <p className="mb-4 font-semibold">Important: Keep your appliance secure by:</p>
@@ -275,21 +274,21 @@ function DownloadContent() {
             ].map((item, index) => (
               <li 
                 key={index}
-                className="pl-6 relative transition-all duration-300 hover:translate-x-2 hover:text-[#ff6b6b] py-1 security-item"
+                className="pl-6 relative transition-all duration-300 hover:translate-x-2 hover:text-[#a123f6] py-1 security-item"
               >
                 <span 
                   className="absolute left-0 security-lock"
                   style={{ animationDelay: `${(index + 1) * 0.3}s` }}
                 >
-                  🔒
+                  • 
                 </span>
                 {item}
               </li>
             ))}
           </ul>
           
-          <div className="mt-6 p-4 bg-[#00d4ff]/10 border border-[#00d4ff]/20 rounded-xl text-sm access-note">
-            <div className="font-semibold mb-2">📍 Access Information:</div>
+          <div className="mt-6 p-4 bg-[#00ff00]/10 border border-[#00ff00]/20 rounded-xl text-sm access-note">
+            <div className="font-semibold mb-2">Access Information:</div>
             <div className="space-y-1">
               <div>• Web Interface: <span className="font-mono text-[#00d4ff]">http://localhost:3000</span></div>
               <div>• API Endpoint: <span className="font-mono text-[#00d4ff]">http://localhost:6789</span></div>
