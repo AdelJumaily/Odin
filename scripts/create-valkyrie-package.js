@@ -23,8 +23,10 @@ async function createValkyriePackage(orgId) {
     const valkyrieDockerFiles = [
       path.join(__dirname, '..', 'valkyrie', 'docker-compose.yml'),
       path.join(__dirname, '..', 'valkyrie', 'docker-compose.override.yml'),
+      path.join(__dirname, '..', 'valkyrie', 'docker-compose.prod.yml'),
       path.join(__dirname, '..', 'valkyrie', 'install.sh'),
       path.join(__dirname, '..', 'valkyrie', 'install-complete.sh'),
+      path.join(__dirname, '..', 'valkyrie', 'setup-raspberry-pi.sh'),
       path.join(__dirname, '..', 'valkyrie', 'README.md')
     ];
     
@@ -187,15 +189,20 @@ pause
 
 ## 🚀 Quick Start
 
-### For Linux/Mac:
+### Option 1: Local Development
 \`\`\`bash
+# Linux/Mac
 chmod +x install.sh
 ./install.sh
+
+# Windows
+install.bat
 \`\`\`
 
-### For Windows:
-\`\`\`cmd
-install.bat
+### Option 2: Raspberry Pi Production Setup
+\`\`\`bash
+chmod +x setup-raspberry-pi.sh
+./setup-raspberry-pi.sh
 \`\`\`
 
 ## 📋 Prerequisites
