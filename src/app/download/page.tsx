@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-export default function DownloadPage() {
+function DownloadContent() {
   const searchParams = useSearchParams();
   const orgId = searchParams.get('org');
   const checksum = searchParams.get('checksum');
@@ -425,5 +425,22 @@ export default function DownloadPage() {
         }
       `}</style>
     </div>
+  );
+}
+
+export default function DownloadPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen text-white overflow-x-hidden flex items-center justify-center" style={{
+        background: 'linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%)'
+      }}>
+        <div className="text-center">
+          <div className="text-4xl mb-4">Loading...</div>
+          <div className="text-xl opacity-80">Preparing your download</div>
+        </div>
+      </div>
+    }>
+      <DownloadContent />
+    </Suspense>
   );
 }
