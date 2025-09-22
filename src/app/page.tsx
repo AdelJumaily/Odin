@@ -1,74 +1,73 @@
-import Navbar from './components/Navbar';
-import { WhatWeDo } from '../components/what-we-do';
-import Footer from '../components/Footer';
+import Link from 'next/link';
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="min-h-screen">
-      <Navbar />
-      
-      {/* Hero Section */}
-      <section className="relative h-screen w-full overflow-hidden bg-black">
-        {/* Background Video */}
-        <video
-          className="absolute inset-0 w-full h-full object-cover"
-          src="/globeSpinning.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-        />
-        {/* Dark overlay for readability */}
-        <div className="absolute inset-0 bg-black/60" />
-        
-        {/* Content */}
-        <div className="relative z-10 flex items-center justify-center h-full px-16 sm:px-24 lg:px-32 xl:px-40">
-          <div className="max-w-5xl mx-auto text-center">
-            {/* Subtitle */}
-            <p className="text-neutral-300 text-base sm:text-lg mb-5">
-              Secure File Management for Organizations
+    <div className="min-h-screen bg-black text-white">
+      <div className="container mx-auto px-8 py-16">
+        <div className="text-center mb-16">
+          <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
+            Odin Platform
+          </h1>
+          <p className="text-xl text-gray-300 mb-8">
+            Organized, scalable, and maintainable company platform
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="bg-gray-900 p-8 rounded-lg border border-gray-700">
+            <h2 className="text-2xl font-semibold mb-4 text-blue-400">Company</h2>
+            <p className="text-gray-300 mb-6">
+              Company pages, dashboard, and corporate information
             </p>
-            
-            {/* Main Headline - Updated */}
-            <div className="b-12 pb-12">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight pb-35">
-                Enterprise Grade File Management Systems
-              </h1>
-            </div>
-            
-            {/* CTA Buttons */}
-            <div className="relitive flex flex-col gap-5 sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 justify-center items-center">
-              <a 
-                href="/download"
-                className="w-56 h-14 bg-gradient-to-br from-[#e01300]/20 to-black rounded-full border-2 border-[#e01300] text-white text-base font-semibold hover:bg-[#e01300] transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-[#e01300]/25 flex items-center justify-center"
-              >
-                Download Valkyrie
-              </a>
-              <a 
-                href="#learn-more"
-                className="w-56 h-14 rounded-full bg-gradient-to-br from-white/20 to-black text-white border-2 border-white text-base font-semibold hover:bg-white hover:text-black transition-all duration-300 transform hover:scale-105 flex items-center justify-center"
-              >
-                Learn More
-              </a>
-            </div>
+            <Link 
+              href="/company" 
+              className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded transition-colors inline-block"
+            >
+              Visit Company
+            </Link>
+          </div>
+
+          <div className="bg-gray-900 p-8 rounded-lg border border-gray-700">
+            <h2 className="text-2xl font-semibold mb-4 text-purple-400">Products</h2>
+            <p className="text-gray-300 mb-6">
+              Our product portfolio including Valkyrie and more
+            </p>
+            <Link 
+              href="/products" 
+              className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded transition-colors inline-block"
+            >
+              View Products
+            </Link>
+          </div>
+
+          <div className="bg-gray-900 p-8 rounded-lg border border-gray-700">
+            <h2 className="text-2xl font-semibold mb-4 text-green-400">Valkyrie</h2>
+            <p className="text-gray-300 mb-6">
+              Advanced file management and security platform
+            </p>
+            <Link 
+              href="/products/valkyrie" 
+              className="bg-green-600 hover:bg-green-700 px-6 py-3 rounded transition-colors inline-block"
+            >
+              Launch Valkyrie
+            </Link>
           </div>
         </div>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
-          <div className="animate-bounce">
-            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
+        <div className="mt-16 text-center">
+          <h3 className="text-2xl font-semibold mb-4">New Organization Structure</h3>
+          <div className="bg-gray-900 p-6 rounded-lg max-w-4xl mx-auto">
+            <pre className="text-sm text-gray-300 text-left overflow-x-auto">
+{`odin/
+├── company/          # Company pages & components
+├── products/         # Product applications
+│   └── valkyrie/    # Valkyrie file manager
+├── shared/          # Shared utilities
+└── src/app/         # Main Next.js app`}
+            </pre>
           </div>
         </div>
-      </section>
-
-      {/* What We Do Section */}
-      <WhatWeDo />
-      
-      {/* Footer */}
-      <Footer />
+      </div>
     </div>
   );
 }

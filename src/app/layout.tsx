@@ -1,32 +1,42 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/context/ThemeContext";
-import { SidebarProvider } from "@/context/SidebarContext";
+import Link from "next/link";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Odin - Autonomous Security Operations",
-  description: "Advanced security operations platform for modern enterprises",
+  title: "Odin - Company Platform",
+  description: "Odin company platform with products and services",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} font-sans antialiased`} suppressHydrationWarning={true}>
-        <ThemeProvider>
-          <SidebarProvider>
-            {children}
-          </SidebarProvider>
-        </ThemeProvider>
+      <body className={inter.className}>
+        <nav className="bg-gray-900 text-white p-4">
+          <div className="container mx-auto flex justify-between items-center">
+            <Link href="/" className="text-2xl font-bold">
+              Odin
+            </Link>
+            <div className="space-x-4">
+              <Link href="/company" className="hover:text-blue-400">
+                Company
+              </Link>
+              <Link href="/products" className="hover:text-blue-400">
+                Products
+              </Link>
+              <Link href="/products/valkyrie" className="hover:text-blue-400">
+                Valkyrie
+              </Link>
+            </div>
+          </div>
+        </nav>
+        {children}
       </body>
     </html>
   );
