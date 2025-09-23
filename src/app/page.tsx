@@ -269,10 +269,10 @@ export default function Home() {
       </section>
 
       {/* Capabilities Section */}
-      <section className="py-24 px-8 sm:px-12 lg:px-16 xl:px-20 bg-white border-t border-gray-200">
+      <section className="py-24 px-8 sm:px-12 lg:px-16 xl:px-20 bg-black border-t border-gray-200">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-black mb-6">
+            <h2 className="text-4xl font-bold text-white mb-6">
               Our <span className="text-blue-600">Capabilities</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -296,7 +296,7 @@ export default function Home() {
                   {expandedCapability === capability.id ? (
                     <Minus className="w-5 h-5 text-blue-600 transition-all duration-300 rotate-180" />
                   ) : (
-                    <Plus className="w-5 h-5 text-gray-600 group-hover:text-blue-600 transition-all duration-300" />
+                    <Plus className="w-5 h-5 text-white-600 group-hover:text-blue-600 transition-all duration-300" />
                   )}
                 </div>
                 

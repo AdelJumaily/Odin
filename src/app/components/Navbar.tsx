@@ -103,8 +103,8 @@ export default function Navbar() {
       </div>
       
       {/* Floating glass navbar */}
-      <div className="relative ml-auto mr-8 mt-2 w-[700px] z-[10002]">
-        <div className="bg-white/50 backdrop-blur-md rounded-md shadow-lg border border-white/30">
+      <div className="relative ml-auto mr-8 mt-2 w-[800px] z-[10002]">
+        <div className="bg-white backdrop-blur-md rounded-md shadow-lg border border-white/30">
           <div className="px-4 py-2">
             <div className="flex items-center justify-between">
 
@@ -187,7 +187,7 @@ export default function Navbar() {
 
               {/* Desktop navigation */}
               <NavigationMenu className="hidden md:flex">
-                <NavigationMenuList className="gap-4">
+                <NavigationMenuList className="gap-7">
                   {navigationLinks.map((link, index) => (
                     <NavigationMenuItem key={index}>
                       <button
@@ -208,18 +208,19 @@ export default function Navbar() {
                       Solutions
                     </button>
                   </NavigationMenuItem>
-                </NavigationMenuList>
-              </NavigationMenu>
-
-              {/* Right side - Search and CTA */}
-              <div className="flex items-center gap-6">
-                {/* Search icon */}
+                                  {/* Search icon */}
                 <button className="text-black hover:text-blue-600 transition-colors">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
                     <path d="m21 21-4.35-4.35"></path>
                   </svg>
                 </button>
+                </NavigationMenuList>
+              </NavigationMenu>
+
+              {/* Right side - Search and CTA */}
+              <div className="flex items-center gap-6">
+
                 
                 {/* Contact button */}
                 <Button
