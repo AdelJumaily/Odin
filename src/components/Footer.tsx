@@ -1,4 +1,3 @@
-import { LinearGradient } from "react-text-gradients";
 
 export default function Footer() {
   return (
@@ -13,7 +12,7 @@ export default function Footer() {
                 alt="Odin Logo" 
                 className="h-8 w-auto"
               />
-              <span className="text-[#e01300] text-4xl font-bold"><LinearGradient gradient={['to right', '#e01300 ,#ff6940']} fallbackColor="#e01300">odin</LinearGradient></span>
+              <span className="text-4xl font-bold bg-gradient-to-r from-red-600 to-orange-500 bg-clip-text text-transparent">odin</span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
               Advanced file management platform for modern enterprises. 

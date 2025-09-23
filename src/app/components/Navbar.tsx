@@ -5,7 +5,6 @@
 import Logo from "@/registry/default/components/navbar-components/logo"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { LinearGradient } from 'react-text-gradients'
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -20,13 +19,21 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-// Navigation links array to be used in both desktop and mobile menus
-const navigationLinks = [
-  { href: "#platform", label: "Platform" },
-  { href: "#solutions", label: "Solutions" },
-  { href: "#company", label: "Company" },
-  { href: "#resources", label: "Resources" },
-  { href: "#customers", label: "Customers" },
+  // Navigation links array to be used in both desktop and mobile menus
+  const navigationLinks = [
+    { href: "#platform", label: "Platform" },
+    { href: "/company", label: "Company" },
+    { href: "/resources", label: "Resources" },
+    { href: "#customers", label: "Customers" },
+  ]
+
+// Solutions dropdown items
+const solutionsItems = [
+  {
+    title: "Valkyrie",
+    href: "/solutions/valkyrie",
+    description: "Enterprise file management and security platform"
+  }
 ]
 
 export default function Navbar() {
@@ -89,10 +96,38 @@ export default function Navbar() {
                         </NavigationMenuLink>
                       </NavigationMenuItem>
                     ))}
+                    
+                    {/* Solutions in mobile */}
+                    <NavigationMenuItem className="w-full">
+                      <NavigationMenuTrigger className="w-full py-3 px-2 text-white hover:text-white transition-all duration-300 hover:shadow-[0_0_20px_rgba(129,27,246,0.5)] hover:shadow-lg bg-transparent data-[state=open]:bg-transparent data-[active]:bg-transparent">
+                        Solutions
+                      </NavigationMenuTrigger>
+                      <NavigationMenuContent>
+                        <ul className="grid w-full gap-3 p-4">
+                          {solutionsItems.map((item) => (
+                            <li key={item.title}>
+                              <NavigationMenuLink asChild>
+                                <a
+                                  href={item.href}
+                                  className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                                >
+                                  <div className="text-sm font-medium leading-none text-white">
+                                    {item.title}
+                                  </div>
+                                  <p className="line-clamp-2 text-sm leading-snug text-muted-foreground text-gray-400">
+                                    {item.description}
+                                  </p>
+                                </a>
+                              </NavigationMenuLink>
+                            </li>
+                          ))}
+                        </ul>
+                      </NavigationMenuContent>
+                    </NavigationMenuItem>
 
                     <div className="pt-4 pb-2 border-t border-white/10 w-full">
                       <Button asChild className="cta-button w-full mt-3" size="sm">
-                        <a href="/download">Download Valkyrie</a>
+                        <a href="/contact">Contact Sales</a>
                       </Button>
                     </div>
                   </NavigationMenuList>
@@ -104,8 +139,8 @@ export default function Navbar() {
           <div className="absolute left-6 flex items-center gap-3 h-full">
               <a href="#" className="flex items-center gap-3">
                 <img src="/odin_logo.png" alt="Odin Logo" className="h-12 w-12"/>
-                <p className="text-[40px] font-bold">
-                  <LinearGradient gradient={['to right', '#e01300 ,#ff6940']} fallbackColor="#e01300">odin</LinearGradient>
+                <p className="text-[40px] font-bold bg-gradient-to-r from-blue-500 to-blue-300 bg-clip-text text-transparent">
+                  odin
                 </p>
               </a>
           </div>
@@ -114,7 +149,7 @@ export default function Navbar() {
           <div className="flex align-center">
             <a
               href="#"
-              className="text-white hover:text-[#e01300] transition-all duration-300 hover:shadow-[0_0_20px_rgba(129,27,246,0.5)] hover:shadow-lg"
+              className="text-white hover:text-blue-400 transition-all duration-300 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] hover:shadow-lg"
               aria-label="Home"
             ></a>
             
@@ -125,24 +160,52 @@ export default function Navbar() {
                   <NavigationMenuItem key={index}>
                     <NavigationMenuLink
                       href={link.href}
-                      className="text-white/90 hover:text-[#e01300] px-3 py-2 text-base font-medium transition-colors hover:underline underline-offset-8 decoration-white/30"
+                      className="text-white/90 hover:text-blue-400 px-3 py-2 text-base font-medium transition-colors hover:underline underline-offset-8 decoration-white/30"
                     >
                       {link.label}
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                 ))}
+                
+                {/* Solutions Dropdown */}
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="text-white/90 hover:text-blue-400 px-3 py-2 text-base font-medium transition-colors hover:underline underline-offset-8 decoration-white/30 bg-transparent data-[state=open]:bg-transparent data-[active]:bg-transparent">
+                    Solutions
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                      {solutionsItems.map((item) => (
+                        <li key={item.title}>
+                          <NavigationMenuLink asChild>
+                            <a
+                              href={item.href}
+                              className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                            >
+                              <div className="text-sm font-medium leading-none text-white">
+                                {item.title}
+                              </div>
+                              <p className="line-clamp-2 text-sm leading-snug text-muted-foreground text-gray-400">
+                                {item.description}
+                              </p>
+                            </a>
+                          </NavigationMenuLink>
+                        </li>
+                      ))}
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
           </div>
 
-          {/* Download button - positioned absolute right */}
+          {/* Contact Sales button - positioned absolute right */}
           <div className="absolute right-8 flex items-center gap-1">
             <Button
               asChild
               size="sm"
-              className="w-35 h-10 bg-gradient-to-r from-[#e01300] to-[#ff6940] border-0 text-white w-hover:from-[#e01300] hover:to-[#ff6940] px-8 py-3 rounded-full text-sm font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-[0_0_30px_rgba(129,27,246,0.6)] hover:shadow-lg"
+              className="w-35 h-10 bg-gradient-to-r from-blue-600 to-blue-500 border-0 text-white w-hover:from-blue-700 hover:to-blue-600 px-8 py-3 rounded-full text-sm font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] hover:shadow-lg"
             >
-              <a href="/download" className="">Download Valkyrie</a>
+              <a href="/contact" className="">Contact Sales</a>
             </Button>
           </div>
         </div>

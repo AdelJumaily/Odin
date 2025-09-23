@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { LinearGradient } from 'react-text-gradients';
 
 
 function DownloadContent() {
@@ -71,7 +70,7 @@ function DownloadContent() {
         {/* Header */}
         <div className="text-center mb-12 header-animation">
           <div className="relitive text-[75px] font-extrabold">
-            <LinearGradient gradient={['to right', '#a123f6 ,#5116f6']} fallbackColor="#a123f6">Valkyrie </LinearGradient>
+            <span className="bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">Valkyrie </span>
              File Manager
           </div>
           <div className="relitive text-xl subtitle-fade font-bold pb-2">
