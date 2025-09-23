@@ -177,14 +177,7 @@ export default function ValkyriePage() {
       {/* Features Grid */}
       <section id="features" className="py-24 px-8 sm:px-12 lg:px-16 xl:px-20 bg-black border-t border-white/10">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-600/20 to-pink-600/20 rounded-lg flex items-center justify-center mx-auto">
-                <Zap className="w-8 h-8 text-purple-400" />
-              </div>
-              <h3 className="text-xl font-semibold text-white">5 min implementation time</h3>
-              <p className="text-gray-400">to deploy core file management functionalities</p>
-            </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
             <div className="text-center space-y-4">
               <div className="w-16 h-16 bg-gradient-to-br from-purple-600/20 to-pink-600/20 rounded-lg flex items-center justify-center mx-auto">

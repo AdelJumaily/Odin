@@ -198,8 +198,12 @@ export default function Navbar() {
             </NavigationMenu>
           </div>
 
-          {/* Contact Sales button - positioned absolute right */}
-          <div className="absolute right-8 flex items-center gap-1">
+          {/* Right side buttons - positioned absolute right */}
+          <div className="absolute right-8 flex items-center gap-4">
+            <a href="/careers" className="text-white hover:text-blue-400 transition-all duration-300 text-sm font-medium">
+              We're Hiring
+            </a>
+            <div className="w-px h-6 bg-white/20"></div>
             <Button
               asChild
               size="sm"

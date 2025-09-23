@@ -41,35 +41,30 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-white font-semibold text-lg">Products</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Threat Detection</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Incident Response</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Security Analytics</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Compliance Management</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Vulnerability Assessment</a></li>
+              <li><a href="/products/valkyrie" className="text-gray-400 hover:text-white transition-colors text-sm">Valkyrie</a></li>
+              <li><span className="text-gray-500 text-sm">Loki (Coming Soon)</span></li>
+              <li><span className="text-gray-500 text-sm">Thor (Coming Soon)</span></li>
             </ul>
           </div>
 
-          {/* Solutions */}
+          {/* About Us */}
           <div className="space-y-4">
-            <h3 className="text-white font-semibold text-lg">Solutions</h3>
+            <h3 className="text-white font-semibold text-lg">About Us</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Enterprise Security</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Cloud Security</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Network Protection</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Zero Trust Architecture</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">SOC Services</a></li>
+              <li><a href="/company" className="text-gray-400 hover:text-white transition-colors text-sm">Mission</a></li>
+              <li><a href="/careers" className="text-gray-400 hover:text-white transition-colors text-sm">Careers</a></li>
+              <li><a href="/leadership" className="text-gray-400 hover:text-white transition-colors text-sm">Leadership</a></li>
+              <li><a href="/newsroom" className="text-gray-400 hover:text-white transition-colors text-sm">Newsroom</a></li>
             </ul>
           </div>
 
-          {/* Company */}
+          {/* Contact */}
           <div className="space-y-4">
-            <h3 className="text-white font-semibold text-lg">Company</h3>
+            <h3 className="text-white font-semibold text-lg">Contact</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">About Us</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Careers</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Press</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Contact</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Partners</a></li>
+              <li><a href="mailto:contact@odin.com" className="text-gray-400 hover:text-white transition-colors text-sm">contact@odin.com</a></li>
+              <li><a href="/contact" className="text-gray-400 hover:text-white transition-colors text-sm">Contact Form</a></li>
+              <li><a href="/partners" className="text-gray-400 hover:text-white transition-colors text-sm">Partners</a></li>
             </ul>
           </div>
         </div>
@@ -81,10 +76,9 @@ export default function Footer() {
               © 2024 Odin Security. All rights reserved.
             </div>
             <div className="flex space-x-6 justify-center">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Privacy Policy</a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Terms of Service</a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Cookie Policy</a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Security</a>
+              <a href="/privacy" className="text-gray-400 hover:text-white transition-colors text-sm">Privacy Policy</a>
+              <a href="/terms" className="text-gray-400 hover:text-white transition-colors text-sm">Terms of Service</a>
+              <a href="/security" className="text-gray-400 hover:text-white transition-colors text-sm">Security</a>
             </div>
           </div>
         </div>

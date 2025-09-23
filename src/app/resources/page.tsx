@@ -27,33 +27,169 @@ export default function ResourcesPage() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
-          <motion.h1
-            initial={{ opacity: 0.5, y: 100 }}
+      <section className="relative py-32 bg-gradient-to-br from-slate-50 via-white to-blue-50 overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 opacity-40">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 via-transparent to-blue-600/5"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(59,130,246,0.15)_1px,transparent_0)] bg-[length:20px_20px]"></div>
+        </div>
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-blue-600/5 via-transparent to-blue-600/5"></div>
+        
+        <div className="relative max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
+          <div className="text-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{
+                delay: 0.2,
+                duration: 0.6,
+                ease: "easeOut",
+              }}
+              className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-8"
+            >
+              <BookOpen className="w-4 h-4" />
+              Comprehensive Security Knowledge Base
+            </motion.div>
+            
+            <motion.h1
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{
+                delay: 0.3,
+                duration: 0.8,
+                ease: "easeOut",
+              }}
+              className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-8"
+            >
+              <span className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent">
+                Security{" "}
+              </span>
+              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
+                Resources
+              </span>
+            </motion.h1>
+            
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{
+                delay: 0.5,
+                duration: 0.8,
+                ease: "easeOut",
+              }}
+              className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto mb-12 leading-relaxed"
+            >
+              Access our comprehensive library of security guides, documentation, and best practices 
+              to strengthen your organization's cybersecurity posture.
+            </motion.p>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{
+                delay: 0.7,
+                duration: 0.8,
+                ease: "easeOut",
+              }}
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            >
+              <Button
+                asChild
+                size="lg"
+                className="bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30 hover:border-white/50 hover:shadow-2xl hover:shadow-white/20 px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 shadow-lg hover:scale-105"
+              >
+                <a href="#documentation">
+                  Explore Resources
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </a>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="bg-white/10 backdrop-blur-md border border-white/20 text-gray-800 hover:bg-white/25 hover:border-white/40 hover:shadow-2xl hover:shadow-blue-500/20 px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 shadow-lg hover:scale-105"
+              >
+                <a href="#webinars">
+                  Join Webinars
+                </a>
+              </Button>
+            </motion.div>
+          </div>
+          
+          {/* Quick Access Cards */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{
-              delay: 0.3,
+              delay: 0.9,
               duration: 0.8,
-              ease: "easeInOut",
+              ease: "easeOut",
             }}
-            className="bg-gradient-to-br from-gray-800 to-gray-600 py-4 bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl"
+            className="mt-20 grid md:grid-cols-3 gap-6 max-w-5xl mx-auto"
           >
-            Security <span className="text-blue-600">Resources</span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0.5, y: 100 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{
-              delay: 0.5,
-              duration: 0.8,
-              ease: "easeInOut",
-            }}
-            className="text-xl text-gray-600 max-w-4xl mx-auto text-center mt-8"
-          >
-            Access our comprehensive library of security guides, documentation, and best practices 
-            to strengthen your organization's cybersecurity posture.
-          </motion.p>
+            <Card className="bg-white/80 backdrop-blur-sm border border-gray-200 hover:border-blue-300 transition-all duration-300 hover:shadow-lg group">
+              <CardContent className="p-6 text-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-600/20 to-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <BookOpen className="w-8 h-8 text-blue-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Documentation</h3>
+                <p className="text-sm text-gray-600 mb-4">Comprehensive guides and technical docs</p>
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="sm"
+                  className="text-blue-600 hover:text-blue-500"
+                >
+                  <a href="#documentation">
+                    Browse Docs
+                    <ArrowRight className="ml-1 w-4 h-4" />
+                  </a>
+                </Button>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-white/80 backdrop-blur-sm border border-gray-200 hover:border-blue-300 transition-all duration-300 hover:shadow-lg group">
+              <CardContent className="p-6 text-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-600/20 to-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <Video className="w-8 h-8 text-blue-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Webinars</h3>
+                <p className="text-sm text-gray-600 mb-4">Expert-led security training sessions</p>
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="sm"
+                  className="text-blue-600 hover:text-blue-500"
+                >
+                  <a href="#webinars">
+                    View Schedule
+                    <ArrowRight className="ml-1 w-4 h-4" />
+                  </a>
+                </Button>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-white/80 backdrop-blur-sm border border-gray-200 hover:border-blue-300 transition-all duration-300 hover:shadow-lg group">
+              <CardContent className="p-6 text-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-600/20 to-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <Download className="w-8 h-8 text-blue-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Downloads</h3>
+                <p className="text-sm text-gray-600 mb-4">Templates, checklists, and reports</p>
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="sm"
+                  className="text-blue-600 hover:text-blue-500"
+                >
+                  <a href="#downloads">
+                    Download Now
+                    <ArrowRight className="ml-1 w-4 h-4" />
+                  </a>
+                </Button>
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
       </section>
 

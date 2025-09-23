@@ -25,33 +25,126 @@ export default function CompanyPage() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
-          <motion.h1
-            initial={{ opacity: 0.5, y: 100 }}
+      <section className="relative py-32 bg-gradient-to-br from-stone-100 via-stone-50 to-blue-50 overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 opacity-40">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 via-transparent to-blue-600/5"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(59,130,246,0.15)_1px,transparent_0)] bg-[length:20px_20px]"></div>
+        </div>
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-blue-600/5 via-transparent to-blue-600/5"></div>
+        
+        <div className="relative max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
+          <div className="text-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{
+                delay: 0.2,
+                duration: 0.6,
+                ease: "easeOut",
+              }}
+              className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-8"
+            >
+              <Shield className="w-4 h-4" />
+              Trusted by 500+ Enterprises Worldwide
+            </motion.div>
+            
+            <motion.h1
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{
+                delay: 0.3,
+                duration: 0.8,
+                ease: "easeOut",
+              }}
+              className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-8 relative"
+            >
+              <span className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent relative">
+                About{" "}
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-900/20 via-gray-800/20 to-gray-900/20 blur-xl opacity-60"></div>
+              </span>
+              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent relative">
+                Odin
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-blue-800/20 blur-xl opacity-60"></div>
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent blur-2xl opacity-30"></div>
+            </motion.h1>
+            
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{
+                delay: 0.5,
+                duration: 0.8,
+                ease: "easeOut",
+              }}
+              className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto mb-12 leading-relaxed"
+            >
+              We are a team of security experts dedicated to protecting enterprises from evolving cyber threats. 
+              Our mission is to make the digital world safer through innovative security solutions.
+            </motion.p>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{
+                delay: 0.7,
+                duration: 0.8,
+                ease: "easeOut",
+              }}
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            >
+              <Button
+                asChild
+                size="lg"
+                className="bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30 hover:border-white/50 hover:shadow-2xl hover:shadow-white/20 px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 shadow-lg hover:scale-105"
+              >
+                <a href="#mission">
+                  Learn More About Us
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </a>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="bg-white/10 backdrop-blur-md border border-white/20 text-gray-800 hover:bg-white/25 hover:border-white/40 hover:shadow-2xl hover:shadow-blue-500/20 px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 shadow-lg hover:scale-105"
+              >
+                <a href="/contact">
+                  Get in Touch
+                </a>
+              </Button>
+            </motion.div>
+          </div>
+          
+          {/* Stats Preview */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{
-              delay: 0.3,
+              delay: 0.9,
               duration: 0.8,
-              ease: "easeInOut",
+              ease: "easeOut",
             }}
-            className="bg-gradient-to-br from-gray-800 to-gray-600 py-4 bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl"
+            className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto"
           >
-            About <span className="text-blue-600">Odin</span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0.5, y: 100 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{
-              delay: 0.5,
-              duration: 0.8,
-              ease: "easeInOut",
-            }}
-            className="text-xl text-gray-600 max-w-4xl mx-auto text-center mt-8"
-          >
-            We are a team of security experts dedicated to protecting enterprises from evolving cyber threats. 
-            Our mission is to make the digital world safer through innovative security solutions.
-          </motion.p>
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">500+</div>
+              <div className="text-sm text-gray-600 uppercase tracking-wide">Enterprises</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">50+</div>
+              <div className="text-sm text-gray-600 uppercase tracking-wide">Countries</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">99.9%</div>
+              <div className="text-sm text-gray-600 uppercase tracking-wide">Uptime</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">24/7</div>
+              <div className="text-sm text-gray-600 uppercase tracking-wide">Monitoring</div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -121,7 +214,7 @@ export default function CompanyPage() {
       </section>
 
       {/* Team Section */}
-      <section className="py-24 bg-white border-t border-gray-200">
+      <section className="py-24 bg-stone-100 border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-black mb-6">
@@ -207,7 +300,7 @@ export default function CompanyPage() {
       </section>
 
       {/* Culture Section */}
-      <section className="py-24 bg-white border-t border-gray-200">
+      <section className="py-24 bg-stone-100 border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-8">

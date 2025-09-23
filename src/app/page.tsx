@@ -13,7 +13,8 @@ import {
   Search,
   CheckCircle,
   Clock,
-  Minus
+  Minus,
+  Users
 } from "lucide-react";
 import { GlobeDemo } from "@/components/ui/globe-demo";
 
@@ -100,12 +101,14 @@ export default function Home() {
               </div>
               
               {/* Main Headline */}
-              <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold text-white leading-tight mb-8">
+              <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold text-white leading-tight mb-8 relative">
                 The modern way of
                 <br />
-                <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-blue-600 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-blue-600 bg-clip-text text-transparent relative">
                   securing enterprises
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-blue-600/20 blur-xl opacity-60"></div>
                 </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent blur-2xl opacity-30"></div>
               </h1>
               
               {/* Description */}
@@ -119,7 +122,7 @@ export default function Home() {
                 <Button
                   asChild
                   size="lg"
-                  className="bg-white text-black hover:bg-gray-100 px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
+                  className="bg-gradient-to-r from-blue-600 to-blue-500 border-0 text-white hover:from-blue-700 hover:to-blue-600 px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] hover:shadow-lg"
                 >
                   <a href="/contact">
                     Let's Talk
@@ -128,9 +131,8 @@ export default function Home() {
                 </Button>
                 <Button
                   asChild
-                  variant="outline"
                   size="lg"
-                  className="border-white/30 text-white hover:bg-white/10 px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300"
+                  className="bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/25 hover:border-white/40 hover:shadow-2xl hover:shadow-blue-500/20 px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 shadow-lg hover:scale-105"
                 >
                   <a href="/solutions/valkyrie">
                     View Solutions
@@ -143,72 +145,74 @@ export default function Home() {
         </div>
       </section>
 
-
-      {/* Features Grid */}
+      {/* Partners Section */}
       <section className="py-24 px-8 sm:px-12 lg:px-16 xl:px-20 bg-black border-t border-white/10">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-lg flex items-center justify-center mx-auto">
-                <Zap className="w-8 h-8 text-blue-400" />
-              </div>
-              <h3 className="text-xl font-semibold text-white">5 min implementation time</h3>
-              <p className="text-gray-400">to deploy core security functionalities</p>
-            </div>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-white mb-6">
+              Trusted by <span className="text-blue-400">Industry Leaders</span>
+            </h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              We partner with the world's leading technology companies to deliver enterprise-grade security solutions
+            </p>
+          </div>
 
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-lg flex items-center justify-center mx-auto">
-                <Search className="w-8 h-8 text-blue-400" />
+          {/* Animated Carousel */}
+          <div className="relative overflow-hidden">
+            <div className="flex animate-scroll">
+              {/* First set of logos */}
+              <div className="flex space-x-16 items-center flex-shrink-0">
+                <div className="text-2xl font-bold text-gray-400">VERCEL</div>
+                <div className="text-2xl font-bold text-gray-400">AMAZON</div>
+                <div className="text-2xl font-bold text-gray-400">MICROSOFT</div>
+                <div className="text-2xl font-bold text-gray-400">GOOGLE</div>
+                <div className="text-2xl font-bold text-gray-400">IBM</div>
+                <div className="text-2xl font-bold text-gray-400">ORACLE</div>
+                <div className="text-2xl font-bold text-gray-400">SALESFORCE</div>
+                <div className="text-2xl font-bold text-gray-400">NETFLIX</div>
               </div>
-              <h3 className="text-xl font-semibold text-white">Client and server-side SDKs</h3>
-              <p className="text-gray-400">to fast-track implementation</p>
-            </div>
-
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-lg flex items-center justify-center mx-auto">
-                <CheckCircle className="w-8 h-8 text-blue-400" />
+              {/* Duplicate set for seamless loop */}
+              <div className="flex space-x-16 items-center flex-shrink-0">
+                <div className="text-2xl font-bold text-gray-400">VERCEL</div>
+                <div className="text-2xl font-bold text-gray-400">AMAZON</div>
+                <div className="text-2xl font-bold text-gray-400">MICROSOFT</div>
+                <div className="text-2xl font-bold text-gray-400">GOOGLE</div>
+                <div className="text-2xl font-bold text-gray-400">IBM</div>
+                <div className="text-2xl font-bold text-gray-400">ORACLE</div>
+                <div className="text-2xl font-bold text-gray-400">SALESFORCE</div>
+                <div className="text-2xl font-bold text-gray-400">NETFLIX</div>
               </div>
-              <h3 className="text-xl font-semibold text-white">Advanced threat detection</h3>
-              <p className="text-gray-400">beats any traditional security solution</p>
-            </div>
-
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-lg flex items-center justify-center mx-auto">
-                <Clock className="w-8 h-8 text-blue-400" />
-              </div>
-              <h3 className="text-xl font-semibold text-white">A single integration that allows you to quickly set up and scale</h3>
-              <p className="text-gray-400">across your entire organization</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Global Scale Section */}
-      <section className="py-24 px-8 sm:px-12 lg:px-16 xl:px-20 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left Content */}
-            <div className="space-y-8">
-              <div className="mb-6">
-                <span className="text-blue-600 text-lg font-medium">Global Scale</span>
-              </div>
-              
-              <h2 className="text-5xl sm:text-6xl font-bold text-black leading-tight mb-8">
-                Companies across the globe leverage Odin's trusted security platform
-              </h2>
-              
-              <p className="text-xl text-gray-600 leading-relaxed">
-                Companies across the globe can leverage Odin's trusted registry of 1 billion+ 
-                security events to supercharge threat detection and response. Our global teams 
-                are here to support you wherever you and your customers operate.
-              </p>
+      {/* Mission Statement Section */}
+      <section className="py-24 px-8 sm:px-12 lg:px-16 xl:px-20 bg-black relative">
+        {/* Corner Brackets */}
+        <div className="absolute top-8 left-8 w-8 h-8 border-l-2 border-t-2 border-white"></div>
+        <div className="absolute top-8 right-8 w-8 h-8 border-r-2 border-t-2 border-white"></div>
+        <div className="absolute bottom-8 left-8 w-8 h-8 border-l-2 border-b-2 border-white"></div>
+        <div className="absolute bottom-8 right-8 w-8 h-8 border-r-2 border-b-2 border-white"></div>
+        
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-start gap-6">
+            {/* Star Icon */}
+            <div className="w-6 h-6 text-white mt-2 flex-shrink-0">
+              <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
             </div>
-
-            {/* Right Content - 3D Globe */}
-            <div className="relative">
-              <div className="w-full h-96 mx-auto relative">
-                <GlobeDemo />
-              </div>
+            
+            {/* Text Content */}
+            <div className="space-y-8 text-white">
+              <p className="text-lg leading-relaxed">
+                Global threats are mounting. Turbulence and volatility are the new norm. But as America has proven for centuries, when we embrace daring ideas and resourceful development, we light the way forward.
+              </p>
+              
+              <p className="text-lg leading-relaxed">
+                Odin exists to restore that ethos to American cybersecurity. We accelerate our national security and advance our strategic edge with every challenge answered.
+              </p>
             </div>
           </div>
         </div>
@@ -327,42 +331,68 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Partners Section */}
-      <section className="py-24 px-8 sm:px-12 lg:px-16 xl:px-20 bg-black border-t border-white/10">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-6">
-              Trusted by <span className="text-blue-400">Industry Leaders</span>
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              We partner with the world's leading technology companies to deliver enterprise-grade security solutions
-            </p>
-          </div>
 
-          {/* Animated Carousel */}
-          <div className="relative overflow-hidden">
-            <div className="flex animate-scroll">
-              {/* First set of logos */}
-              <div className="flex space-x-16 items-center flex-shrink-0">
-                <div className="text-2xl font-bold text-gray-400">VERCEL</div>
-                <div className="text-2xl font-bold text-gray-400">AMAZON</div>
-                <div className="text-2xl font-bold text-gray-400">MICROSOFT</div>
-                <div className="text-2xl font-bold text-gray-400">GOOGLE</div>
-                <div className="text-2xl font-bold text-gray-400">IBM</div>
-                <div className="text-2xl font-bold text-gray-400">ORACLE</div>
-                <div className="text-2xl font-bold text-gray-400">SALESFORCE</div>
-                <div className="text-2xl font-bold text-gray-400">NETFLIX</div>
+      {/* Careers Section - Professional Contractor Style */}
+      <section className="py-24 bg-stone-100">
+        <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left Side - Text Content */}
+            <div className="space-y-8">
+              <div>
+                <h3 className="text-sm font-medium text-gray-600 uppercase tracking-wide mb-4">Careers</h3>
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black leading-tight mb-8 relative">
+                  Join us in securing the future of cybersecurity.
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent blur-xl opacity-50"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-black/80 blur-sm opacity-40"></div>
+                </h2>
               </div>
-              {/* Duplicate set for seamless loop */}
-              <div className="flex space-x-16 items-center flex-shrink-0">
-                <div className="text-2xl font-bold text-gray-400">VERCEL</div>
-                <div className="text-2xl font-bold text-gray-400">AMAZON</div>
-                <div className="text-2xl font-bold text-gray-400">MICROSOFT</div>
-                <div className="text-2xl font-bold text-gray-400">GOOGLE</div>
-                <div className="text-2xl font-bold text-gray-400">IBM</div>
-                <div className="text-2xl font-bold text-gray-400">ORACLE</div>
-                <div className="text-2xl font-bold text-gray-400">SALESFORCE</div>
-                <div className="text-2xl font-bold text-gray-400">NETFLIX</div>
+              
+              <p className="text-lg text-gray-700 leading-relaxed">
+                From concept to deployment in a week. An engineer's playground where we build what we believe is right and needs to exist. A dedicated team rallying around a shared mission to make a positive impact by creating a safer digital world. That's life at Odin.
+              </p>
+              
+              <div className="flex items-center gap-4">
+                <a href="/careers" className="text-black underline hover:no-underline transition-all duration-300 relative">
+                  Learn More
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent blur-sm opacity-30"></div>
+                </a>
+                <button className="w-12 h-12 bg-black rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors duration-300 relative shadow-lg shadow-black/20">
+                  <ArrowRight className="w-5 h-5 text-white" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent blur-sm opacity-40"></div>
+                </button>
+              </div>
+            </div>
+
+            {/* Right Side - Image Collage */}
+            <div className="grid grid-cols-2 gap-4 h-96">
+              {/* Top Image - Large Horizontal */}
+              <div className="col-span-2 bg-gray-200 rounded-lg flex items-center justify-center">
+                <div className="text-center text-gray-500">
+                  <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Users className="w-8 h-8 text-gray-400" />
+                  </div>
+                  <p className="text-sm">Engineer working on security platform</p>
+                </div>
+              </div>
+              
+              {/* Bottom Left Image */}
+              <div className="bg-gray-200 rounded-lg flex items-center justify-center">
+                <div className="text-center text-gray-500">
+                  <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <Users className="w-6 h-6 text-gray-400" />
+                  </div>
+                  <p className="text-xs">Team collaboration</p>
+                </div>
+              </div>
+              
+              {/* Bottom Right Image */}
+              <div className="bg-gray-200 rounded-lg flex items-center justify-center">
+                <div className="text-center text-gray-500">
+                  <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <Shield className="w-6 h-6 text-gray-400" />
+                  </div>
+                  <p className="text-xs">Security operations</p>
+                </div>
               </div>
             </div>
           </div>
