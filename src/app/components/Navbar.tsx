@@ -90,30 +90,27 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-[10001]">
-      {/* Logo - positioned on the left, detached */}
-      <div className="absolute left-6 top-1/2 -translate-y-1/2 z-[10002]">
-        <a href="#" className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
-            <svg viewBox="0 0 24 24" fill="white" className="w-4 h-4">
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-            </svg>
-          </div>
-          <span className="text-white text-lg font-bold tracking-wider">ODIN</span>
-        </a>
-      </div>
-      
-      {/* Floating glass navbar */}
-      <div className="relative ml-auto mr-8 mt-2 w-[800px] z-[10002]">
-        <div className="bg-white backdrop-blur-md rounded-md shadow-lg border border-white/30">
-          <div className="px-4 py-2">
-            <div className="flex items-center justify-between">
+      {/* Full-width glass navbar */}
+      <div className="bg-white/10 backdrop-blur-xl shadow-2xl border-b border-white/20 px-8 py-4">
+        <div className="flex items-center justify-between">
+              {/* Logo */}
+              <div className="flex items-center gap-3">
+                <a href="#" className="flex items-center gap-2 group">
+                  <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.5)] group-hover:border-white/50 transition-all duration-300">
+                    <svg viewBox="0 0 24 24" fill="white" className="w-4 h-4 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-all duration-300">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                  </div>
+                  <span className="text-white text-lg font-bold tracking-wider group-hover:text-blue-400 group-hover:drop-shadow-[0_0_10px_rgba(59,130,246,0.6)] transition-all duration-300">ODIN</span>
+                </a>
+              </div>
 
               {/* Mobile menu trigger */}
               <div className="md:hidden">
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
-                      className="group size-8 bg-transparent hover:bg-gray-100 text-black border-0"
+                      className="group size-8 bg-white/10 hover:bg-white/20 text-white border border-white/30 backdrop-blur-sm hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] hover:border-white/50 transition-all duration-300"
                       variant="ghost"
                       size="icon"
                       aria-label="Open menu"
@@ -149,7 +146,7 @@ export default function Navbar() {
                   {/* Mobile menu content */}
                   <PopoverContent
                     align="start"
-                    className="w-64 p-1 bg-white border border-gray-200 shadow-lg"
+                    className="w-64 p-1 bg-black/90 backdrop-blur-xl border border-white/20 shadow-2xl"
                   >
                     <NavigationMenu className="max-w-none *:w-full">
                       <NavigationMenuList className="flex-col items-start gap-0">
@@ -157,7 +154,7 @@ export default function Navbar() {
                           <NavigationMenuItem key={index} className="w-full">
                             <NavigationMenuLink
                               href={link.href}
-                              className="block py-3 px-2 text-black hover:text-blue-600 transition-all duration-300"
+                              className="block py-3 px-2 text-white hover:text-blue-400 transition-all duration-300 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.6)] hover:shadow-[0_0_15px_rgba(59,130,246,0.3)]"
                             >
                               {link.label.toUpperCase()}
                             </NavigationMenuLink>
@@ -168,14 +165,14 @@ export default function Navbar() {
                         <NavigationMenuItem className="w-full">
                           <button
                             onClick={() => handleDropdownToggle('solutions')}
-                            className="w-full py-3 px-2 text-black hover:text-blue-600 transition-all duration-300 bg-transparent text-left"
+                            className="w-full py-3 px-2 text-white hover:text-blue-400 transition-all duration-300 bg-transparent text-left hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.6)] hover:shadow-[0_0_15px_rgba(59,130,246,0.3)]"
                           >
                             SOLUTIONS
                           </button>
                         </NavigationMenuItem>
 
-                        <div className="pt-4 pb-2 border-t border-gray-200 w-full">
-                          <Button asChild className="w-full mt-3 bg-black text-white hover:bg-gray-800" size="sm">
+                        <div className="pt-4 pb-2 border-t border-white/20 w-full">
+                          <Button asChild className="w-full mt-3 bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 border border-white/30 hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] hover:border-white/50 hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.6)] transition-all duration-300" size="sm">
                             <a href="/contact">CONTACT US</a>
                           </Button>
                         </div>
@@ -192,7 +189,7 @@ export default function Navbar() {
                     <NavigationMenuItem key={index}>
                       <button
                         onClick={() => handleDropdownToggle(link.href.replace('#', '').replace('/', ''))}
-                        className="text-black hover:text-blue-600 px-2 py-1 text-xs font-medium transition-colors uppercase tracking-wide bg-transparent"
+                        className="text-white hover:text-blue-400 px-2 py-1 text-xs font-medium transition-all duration-300 uppercase tracking-wide bg-transparent hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.6)] hover:shadow-[0_0_15px_rgba(59,130,246,0.3)]"
                       >
                         {link.label}
                       </button>
@@ -203,13 +200,13 @@ export default function Navbar() {
                   <NavigationMenuItem>
                     <button
                       onClick={() => handleDropdownToggle('solutions')}
-                      className="text-black hover:text-blue-600 px-2 py-1 text-xs font-medium transition-colors uppercase tracking-wide bg-transparent"
+                      className="text-white hover:text-blue-400 px-2 py-1 text-xs font-medium transition-all duration-300 uppercase tracking-wide bg-transparent hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.6)] hover:shadow-[0_0_15px_rgba(59,130,246,0.3)]"
                     >
                       Solutions
                     </button>
                   </NavigationMenuItem>
                                   {/* Search icon */}
-                <button className="text-black hover:text-blue-600 transition-colors">
+                <button className="text-white hover:text-blue-400 transition-all duration-300 hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.6)] hover:shadow-[0_0_15px_rgba(59,130,246,0.3)]">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
                     <path d="m21 21-4.35-4.35"></path>
@@ -226,7 +223,7 @@ export default function Navbar() {
                 <Button
                   asChild
                   size="sm"
-                  className="bg-black text-white hover:bg-gray-800 px-4 py-1 rounded-md text-xs font-medium transition-all duration-300 flex items-center gap-1"
+                  className="bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 border border-white/30 px-4 py-1 rounded-lg text-xs font-medium transition-all duration-300 flex items-center gap-1 hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] hover:border-white/50 hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.6)]"
                 >
                   <a href="/contact">
                     CONTACT US
@@ -237,8 +234,6 @@ export default function Navbar() {
                   </a>
                 </Button>
               </div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -257,7 +252,7 @@ export default function Navbar() {
         
         {/* Dropdown menu */}
         <div className={`fixed top-0 right-0 bottom-0 w-3/5 bg-black transition-transform duration-500 ease-in-out ${
-          activeDropdown ? 'translate-x-0' : 'translate-x-full'
+          activeDropdown ? 'translate-x-0 shadow-[0_0_50px_rgba(59,130,246,0.3)] shadow-[0_0_100px_rgba(147,51,234,0.2)]' : 'translate-x-full'
         }`}>
           <div className="w-full h-full flex flex-col pt-20">
             {/* Menu list */}

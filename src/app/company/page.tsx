@@ -25,7 +25,7 @@ export default function CompanyPage() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative py-32 bg-gradient-to-br from-stone-100 via-stone-50 to-blue-50 overflow-hidden">
+      <section className="relative py-32 bg-black overflow-hidden">
         {/* Background Elements */}
         <div className="absolute inset-0 opacity-40">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 via-transparent to-blue-600/5"></div>
@@ -43,7 +43,7 @@ export default function CompanyPage() {
                 duration: 0.6,
                 ease: "easeOut",
               }}
-              className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-8"
+              className="inline-flex items-center gap-2 bg-blue-500/20 text-blue-400 px-4 py-2 rounded-full text-sm font-medium mb-8 backdrop-blur-sm border border-blue-400/30"
             >
               <Shield className="w-4 h-4" />
               Trusted by 500+ Enterprises Worldwide
@@ -59,9 +59,9 @@ export default function CompanyPage() {
               }}
               className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-8 relative"
             >
-              <span className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent relative">
+              <span className="bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent relative">
                 About{" "}
-                <div className="absolute inset-0 bg-gradient-to-r from-gray-900/20 via-gray-800/20 to-gray-900/20 blur-xl opacity-60"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-gray-200/20 to-white/20 blur-xl opacity-60"></div>
               </span>
               <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent relative">
                 Odin
@@ -78,7 +78,7 @@ export default function CompanyPage() {
                 duration: 0.8,
                 ease: "easeOut",
               }}
-              className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto mb-12 leading-relaxed"
+              className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed"
             >
               We are a team of security experts dedicated to protecting enterprises from evolving cyber threats. 
               Our mission is to make the digital world safer through innovative security solutions.

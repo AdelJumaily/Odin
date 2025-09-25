@@ -114,44 +114,39 @@ function createDashboardTexture() {
 }
 
 function DataCenterModel() {
-  const { scene } = useGLTF('/data_center_rack.glb');
   const dashboardTexture = useMemo(() => createDashboardTexture(), []);
   
-  // Clone the scene to modify materials
-  const clonedScene = useMemo(() => {
-    const cloned = scene.clone();
-    
-    // Traverse the scene to find screen-like materials and apply dashboard texture
-    cloned.traverse((child) => {
-      if (child.isMesh) {
-        // Look for materials that might be screens (you may need to adjust this based on your model)
-        if (child.material && child.material.name && 
-            (child.material.name.includes('screen') || 
-             child.material.name.includes('display') ||
-             child.material.name.includes('monitor'))) {
-          
-          // Create new material with dashboard texture
-          child.material = new THREE.MeshBasicMaterial({
-            map: dashboardTexture,
-            transparent: true,
-            opacity: 0.9
-          });
-        }
-      }
-    });
-    
-    return cloned;
-  }, [scene, dashboardTexture]);
-  
+  // Create a simple server rack representation if the GLTF model fails to load
   return (
     <group>
-      <primitive 
-        object={clonedScene} 
-        scale={[1.2, 1.2, 1.2]} 
-        position={[0, -1.2, 0]}
-        rotation={[0, Math.PI / 6, 0]}
-        castShadow
-      />
+      {/* Server Rack Structure */}
+      <mesh position={[0, 0, 0]} castShadow>
+        <boxGeometry args={[2, 4, 1]} />
+        <meshStandardMaterial color="#2a2a2a" />
+      </mesh>
+      
+      {/* Server Units */}
+      {Array.from({ length: 8 }, (_, i) => (
+        <mesh key={i} position={[0, 1.5 - i * 0.4, 0.6]} castShadow>
+          <boxGeometry args={[1.8, 0.3, 0.2]} />
+          <meshStandardMaterial color="#1a1a1a" />
+        </mesh>
+      ))}
+      
+      {/* Dashboard Screen */}
+      <mesh position={[0, 0, 0.6]} castShadow>
+        <boxGeometry args={[1.5, 2, 0.1]} />
+        <meshBasicMaterial map={dashboardTexture} />
+      </mesh>
+      
+      {/* LED Indicators */}
+      {Array.from({ length: 4 }, (_, i) => (
+        <mesh key={`led-${i}`} position={[0.7, 1 - i * 0.5, 0.6]} castShadow>
+          <sphereGeometry args={[0.05]} />
+          <meshStandardMaterial color={i % 2 === 0 ? "#00ff00" : "#ff0000"} />
+        </mesh>
+      ))}
+      
       {/* Floor shadow */}
       <Shadow 
         position={[0, -2.8, 0]} 
